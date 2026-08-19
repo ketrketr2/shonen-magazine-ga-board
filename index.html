@@ -385,7 +385,7 @@ select.sel:focus{outline:1px solid var(--cy)}
     <div class="sfoot">
       データ最終日 <span class="num">2026-08-18</span><br>
       GitHub Actions で日次更新（予定）<br>
-      <span id="footMode">DEMO MODE</span>
+      <span id="footMode" style="color:var(--gd)">GA4 実測接続済み（Windsor.ai）</span>
     </div>
   </aside>
 
@@ -394,7 +394,7 @@ select.sel:focus{outline:1px solid var(--cy)}
     <header class="top">
       <span class="menubtn" id="menubtn">☰ メニュー</span>
       <div class="crumb"><b>少年マガジン / マガポケ</b><span style="color:var(--mut)">／</span><span id="crumbView">編集部HQ</span>
-        <span class="dm" title="実データ接続前の合成デモデータで動作中">DEMO DATA</span></div>
+        <span class="dm" style="color:var(--gd);border-color:color-mix(in srgb,var(--gd) 45%,transparent);background:color-mix(in srgb,var(--gd) 9%,transparent)" title="トラフィック（セッション・ユーザー・新規率・PV・チャネル構成・エンゲージ）＝GA4実測にキャリブレーション済み。作品別の按分とCV・課金系は推定・デモ">LIVE · GA4実測（CV系は推定）</span></div>
       <div class="rng" id="rngCtl">
         <button data-r="7">7日</button><button data-r="28" class="on">28日</button><button data-r="90">90日</button>
       </div>
@@ -660,19 +660,23 @@ select.sel:focus{outline:1px solid var(--cy)}
           <div class="twrap"><table id="cdTable"></table></div>
         </div>
         <div class="card s7 reveal">
-          <div class="ct"><span class="bar"></span><h3>イベント辞書</h3><span class="sub">主要イベントと発生数（選択期間）</span></div>
+          <div class="ct"><span class="bar"></span><h3>イベント辞書</h3><span class="sub">GA4実測・7/22〜8/18の実発生数</span></div>
           <div class="twrap"><table id="evTable"></table></div>
         </div>
         <div class="card s5 reveal">
           <div class="ct"><span class="bar"></span><h3>UTM命名規約</h3></div>
           <div id="utmRules" style="font-size:12.3px;line-height:2.05"></div>
         </div>
+        <div class="card s12 reveal">
+          <div class="ct"><span class="bar"></span><h3>実測 上位ページ</h3><span class="sub">GA4実測 7/22〜8/18（28日間）· セッション400以上 · /smaga/=週マガ本誌ページ</span></div>
+          <div class="twrap"><table id="realPagesTable"></table></div>
+        </div>
         <div class="card s12 reveal"><div class="insight warn" id="dictInsight"></div></div>
       </div>
     </section>
 
     <footer class="foot">
-      <div>本ボードは <b>合成デモデータ</b> で動作しています。GA4 Data API（<span class="num">runReport</span>）接続時は、チャネル＝<a href="https://support.google.com/analytics/answer/9756891?hl=ja" target="_blank" rel="noopener">デフォルトチャネルグループ</a>、アフィニティ＝<a href="https://support.google.com/analytics/answer/2819950?hl=ja" target="_blank" rel="noopener">Googleシグナルのアフィニティカテゴリ</a>、作品・話数・課金種別＝<a href="https://support.google.com/analytics/answer/14240153?hl=ja" target="_blank" rel="noopener">カスタムディメンション</a>にそのまま置き換わる設計です。本ボードは講談社・週刊少年マガジンの公式プロダクトではない技術デモです。</div>
+      <div>本ボードのトラフィック指標（セッション・ユーザー・新規率・PV・チャネル構成・エンゲージ率・平均滞在・日次波形）は <b>週刊少年マガジン公式サイトの GA4 実測値</b>（2026-01-31〜08-18・Windsor.ai経由）にキャリブレーション済みです。作品別の按分・課金/CV系・アフィニティは<b>推定（デモ）</b>のまま。GA4 Data API（<span class="num">runReport</span>）接続時は、チャネル＝<a href="https://support.google.com/analytics/answer/9756891?hl=ja" target="_blank" rel="noopener">デフォルトチャネルグループ</a>、アフィニティ＝<a href="https://support.google.com/analytics/answer/2819950?hl=ja" target="_blank" rel="noopener">Googleシグナルのアフィニティカテゴリ</a>、作品・話数・課金種別＝<a href="https://support.google.com/analytics/answer/14240153?hl=ja" target="_blank" rel="noopener">カスタムディメンション</a>にそのまま置き換わる設計です。本ボードは講談社・週刊少年マガジンの公式プロダクトではない技術デモです。</div>
       <div class="src">出典・定義：<a href="https://developers.google.com/analytics/devguides/reporting/data/v1?hl=ja" target="_blank" rel="noopener">GA4 Data API</a> ／ <a href="https://support.google.com/analytics/answer/9143382?hl=ja" target="_blank" rel="noopener">GA4 ディメンションと指標</a> ／ 姉妹ボード：<a href="https://ketrketr2.github.io/toyota-ga-board/" target="_blank" rel="noopener">TOYOTA GA4 COMMAND</a>・<a href="https://ketrketr2.github.io/toyota-geo-board/" target="_blank" rel="noopener">AI Visibility KPI Board（GEO）</a> ／ ソースコード：<a href="https://github.com/ketrketr2/shonen-magazine-ga-board" target="_blank" rel="noopener">GitHub</a></div>
     </footer>
   </div>
@@ -712,15 +716,16 @@ const GA = (() => {
 
   /* ---------- マスタ：チャネル（表示順＝固定・配色順） ---------- */
   const CHANNELS=[
-    {id:'org', name:'自然検索',            color:'#3987E5', share:.295, newShare:.52, paid:false},
-    {id:'sem', name:'リスティング広告',     color:'#D95926', share:.105, newShare:.66, paid:true},
-    {id:'dsp', name:'ディスプレイ広告',     color:'#199E70', share:.060, newShare:.83, paid:true},
-    {id:'vid', name:'動画広告',            color:'#C98500', share:.085, newShare:.80, paid:true},
-    {id:'sns', name:'SNS広告',            color:'#D55181', share:.120, newShare:.76, paid:true},
-    {id:'crm', name:'メール・LINE・プッシュ', color:'#008300', share:.090, newShare:.08, paid:false},
-    {id:'ref', name:'外部サイト',          color:'#9085E9', share:.085, newShare:.58, paid:false},
-    {id:'dir', name:'ダイレクト',          color:'#E66767', share:.160, newShare:.18, paid:false},
-  ];
+    {id:'org', name:'自然検索',            color:'#3987E5', share:.7221, newShare:.616, paid:false},
+    {id:'sem', name:'AIアシスタント',       color:'#D95926', share:.0043, newShare:.835, paid:true},
+    {id:'dsp', name:'その他・未分類',       color:'#199E70', share:.0090, newShare:.113, paid:true},
+    {id:'vid', name:'動画（YouTube）',      color:'#C98500', share:.0018, newShare:.633, paid:true},
+    {id:'sns', name:'SNS（オーガニック）',   color:'#D55181', share:.0718, newShare:.772, paid:false},
+    {id:'crm', name:'メール・LINE・プッシュ', color:'#008300', share:.0050, newShare:.08,  paid:false},
+    {id:'ref', name:'外部サイト',          color:'#9085E9', share:.0396, newShare:.604, paid:false},
+    {id:'dir', name:'ダイレクト',          color:'#E66767', share:.1464, newShare:.633, paid:false},
+  ];  // シェア・新規率＝GA4実測（7/22〜8/18・週刊少年マガジン公式）。広告出稿は実測ゼロ
+
   const NC=CHANNELS.length;
 
   /* ---------- マスタ：作品（車種スロットを作品に転用） ----------
@@ -890,13 +895,12 @@ const GA = (() => {
 
   /* ---------- イベント（スパイク） ---------- */
   const EVENTS=[
-    {date:'2026-05-03',model:null,      amp:1.18,dur:5, label:'GW 一気読み無料キャンペーン'},
-    {date:'2026-06-25',model:'bluelock',amp:1.9, dur:10,label:'ブルーロック アニメ新シーズン発表'},
-    {date:'2026-07-08',model:'kaoruhana',amp:2.3,dur:42,label:'薫る花 TVアニメ 放送開始'},
-    {date:'2026-07-15',model:'tokyorev',amp:2.1, dur:7, label:'東リベ 全巻無料 開放'},
-    {date:'2026-08-05',model:null,      amp:1.12,dur:5, label:'新連載3本 一斉スタート'},
-    {date:'2026-08-12',model:null,      amp:1.15,dur:4, label:'コミックス新刊 一斉発売'},
-  ];
+    {date:'2026-03-07', label:'アクセス急増 ①（実測 4.4万S/日）', amp:2.6, dur:2,  model:null},
+    {date:'2026-03-16', label:'急増期間 ②（実測 連日3〜5万S）',   amp:2.4, dur:16, model:null},
+    {date:'2026-04-10', label:'急増期間 ③（実測 2〜4万S）',      amp:2.2, dur:21, model:null},
+    {date:'2026-05-29', label:'急増期間 ④（実測 3.4〜5万S）',    amp:2.4, dur:10, model:null},
+    {date:'2026-07-01', label:'急増期間 ⑤（実測 2〜5.6万S）',    amp:2.5, dur:15, model:null},
+  ];  // 日付・規模＝GA4実測の実スパイク（要因ラベルは中立表記）
   const WD=[1.10,.95,.92,1.38,1.08,1.00,1.12]; // 日〜土（水曜=雑誌発売日）
   /* CV日次ノイズ（決定論・セグメント間で共通のため合計整合は維持される） */
   const DN={};
@@ -951,6 +955,39 @@ const GA = (() => {
     }
     OTHER.push(oc);
   }
+
+
+  /* ========== 実測キャリブレーション（GA4: 週刊少年マガジン公式 416515828 / 2026-08-19 Windsor.ai経由取得） ========== */
+  /* REAL_DAILY[d] = [sessions, users, newusers]  2026-01-31〜2026-08-18 の200日・GA4実測値 */
+  const REAL_DAILY=[[3040,2820,2035],[3622,3276,2423],[3186,2893,2011],[4020,3686,2584],[8756,8115,4479],[3893,3513,2336],[3444,3202,2284],[3335,3068,2270],[3346,3040,2193],[5028,4635,3340],[10641,9638,6599],[8049,7111,4747],[7475,6947,5521],[3861,3461,2538],[14005,12680,10693],[4703,4190,2960],[5301,4771,3244],[7247,6226,4271],[9978,9080,5039],[4704,4238,2875],[3432,3075,2088],[3595,3269,2313],[3313,2974,2152],[3381,3039,2133],[3494,3163,2038],[9220,8388,4726],[4110,3753,2481],[6158,5686,4066],[4179,3768,2710],[5241,4696,3179],[6962,6464,4329],[8323,7806,5476],[10721,9974,5883],[4608,4158,2773],[8000,7629,6488],[43881,43453,40612],[18386,17485,15456],[14075,12955,10271],[14957,13935,11723],[15614,14674,10208],[5913,5388,3785],[6320,5979,4718],[7845,7335,6253],[8176,7610,6206],[32125,31183,30007],[45426,43246,40925],[36771,35197,29766],[43584,41462,38709],[42477,41700,39051],[42235,41539,37832],[40156,40934,37737],[45960,43820,40093],[48820,45971,41075],[53454,50436,43197],[47073,44531,39786],[42027,42061,37237],[45700,43783,39030],[48133,45424,40157],[45763,44069,37810],[32743,31486,27055],[13190,12289,7879],[5311,4838,2777],[3881,3552,2465],[3581,3318,2404],[3870,3567,2618],[3778,3379,2426],[3937,3649,2446],[9685,8739,4753],[4798,4347,2846],[22432,22308,20175],[26216,25336,22771],[26373,25352,22806],[23881,23784,20947],[24576,23278,20386],[30341,29130,23707],[20612,19829,16999],[29080,27942,24935],[30519,29477,25858],[29836,29343,25943],[30707,29279,25817],[34558,32803,29119],[40422,38457,31308],[32553,31709,27611],[30388,29370,25657],[37214,36798,32391],[37172,36276,31824],[33664,32513,28043],[40625,39281,32601],[29050,27947,23089],[18510,17921,15109],[4181,3840,2798],[4290,3920,2994],[4139,3816,2902],[4395,4091,3067],[4690,4398,3306],[8252,7511,5565],[5851,5535,4016],[4730,4321,3114],[4511,4075,2886],[4638,4235,2999],[3789,3531,2342],[3984,3625,2398],[9901,9122,5233],[4723,4308,2847],[4536,4157,2996],[4132,3804,2829],[4367,4037,3152],[4701,4248,3217],[4710,4431,3184],[10427,9690,5628],[5149,4697,3525],[3727,3371,2397],[3398,3143,2286],[3694,3438,2617],[3490,3125,2207],[4138,3692,2559],[10013,9273,5249],[4374,3833,2622],[33897,33137,31936],[43238,41362,39083],[43356,41378,38644],[39129,38307,35314],[37848,36327,33246],[50569,48555,41127],[38046,36767,32932],[36644,35598,32406],[37814,36876,33189],[37403,35924,32371],[6726,6440,4774],[12955,11744,9129],[13855,13008,8047],[6877,6363,4569],[5420,5108,3775],[5978,5483,4182],[5483,5226,3957],[5026,4565,3319],[4958,4580,3123],[13482,12437,7606],[5921,5389,3804],[4455,4039,2487],[4628,4275,3198],[4287,3983,2963],[9630,9350,8351],[5921,5496,4158],[11493,10616,6326],[6246,5652,4268],[5311,4928,3814],[5637,5220,4178],[5750,5337,4332],[18945,18275,16389],[21850,21193,19097],[46462,43399,37541],[30310,29621,26775],[49691,47885,44231],[55317,52746,47055],[51108,47659,42987],[44260,42153,37222],[52326,47791,41806],[56265,53406,44290],[48950,47407,40788],[40229,38566,32990],[42246,41084,35278],[43958,42798,36446],[23725,22784,19059],[20051,19253,16133],[35855,34198,26333],[10325,9781,7284],[10558,10085,7957],[4529,4019,2889],[3998,3662,2690],[3964,3586,2609],[4305,3876,2644],[13484,12249,7945],[5457,4978,3472],[4178,3778,2655],[4269,3878,2797],[3932,3545,2660],[3683,3385,2403],[4163,3734,2541],[10917,9943,5637],[5163,4601,3113],[3762,3392,2357],[4318,3839,2864],[4104,3694,2770],[4186,3840,2560],[4144,3790,2509],[11147,10202,6124],[6012,5708,4178],[4719,4269,3118],[2957,2804,1940],[4027,3740,2786],[4437,4110,2960],[5142,4609,3421],[10810,10156,7176],[5080,4624,3404],[4707,4299,3221],[4129,3800,2927],[4233,3962,3016],[5330,4788,3429],[4921,4479,3065]];
+  const PV_CAL_TARGET=1.478;   // 実測 PV/セッション（直近28日）
+  (function calibrate(){
+    if(REAL_DAILY.length!==NDAYS) return;
+    // (a) チャネル構成を実測シェアへ（直近28日の現行構成→実測構成の係数を全期間に適用）
+    const target=CHANNELS.map(c=>c.share);
+    const cur=new Array(NC).fill(0);
+    for(let d=NDAYS-28;d<NDAYS;d++){
+      for(let c=0;c<NC;c++){
+        for(let mi=0;mi<NM;mi++)cur[c]+=S[d][mi][c];
+        cur[c]+=OTHER[d][c];
+      }
+    }
+    const tot=cur.reduce((a,b)=>a+b,0);
+    const cAdj=target.map((t,c)=>t/Math.max(1e-9,cur[c]/tot));
+    for(let d=0;d<NDAYS;d++)for(let c=0;c<NC;c++){
+      for(let mi=0;mi<NM;mi++)S[d][mi][c]*=cAdj[c];
+      OTHER[d][c]*=cAdj[c];
+    }
+    // (b) 日次合計を実測セッションへ
+    for(let d=0;d<NDAYS;d++){
+      let curD=0;
+      for(let mi=0;mi<NM;mi++)for(let c=0;c<NC;c++)curD+=S[d][mi][c];
+      for(let c=0;c<NC;c++)curD+=OTHER[d][c];
+      const k=REAL_DAILY[d][0]/Math.max(1,curD);
+      for(let mi=0;mi<NM;mi++)for(let c=0;c<NC;c++)S[d][mi][c]*=k;
+      for(let c=0;c<NC;c++)OTHER[d][c]*=k;
+    }
+  })();
 
   /* ---------- セグメント係数 ---------- */
   function segShare(seg,c){
@@ -1015,16 +1052,16 @@ const GA = (() => {
       const cvByGoal={}; GOALS.forEach(g=>cvByGoal[g.id]=X.byModel.reduce((a,b)=>a+b.cv[g.id],0));
       const cv=Object.values(cvByGoal).reduce((a,b)=>a+b,0);
       const value=GOALS.reduce((a,g)=>a+cvByGoal[g.id]*g.value,0);
-      const freq= range<=7?1.55: range<=28?2.35:3.30;   // 毎日読む媒体は重複が大きい
+      const freq= range<=7?1.187: range<=28?1.369:1.238;   // GA4実測（期間セッション÷期間ユニークユーザー）
       const users=sessions/freq;
       const nsAll=CHANNELS.reduce((a,c,i)=>a+(X.byChannel[i]+X.otherByChannel[i])*(seg==='all'?c.newShare:seg==='new'?1:0),0);
       const newRate= sessions? nsAll/sessions:0;
-      const pv=X.byModel.reduce((a,b,i)=>a+b.sessions*MODELS[i].pps,0)+X.other*2.4;
+      const pv=(X.byModel.reduce((a,b,i)=>a+b.sessions*MODELS[i].pps,0)+X.other*2.4)*0.19644;  // ×較正係数 → 実測 PV/S 1.478（GA4 28日）に一致
       return {sessions,users,newRate,cv,cvByGoal,value,pv,modelSessions};
     }
     const T=totals(A), TP=totals(P);
-    const engRate=A.byModel.reduce((a,b,i)=>a+MODELS[i].eng*b.sessions,0)/Math.max(1,T.modelSessions)*(seg==='ret'?1.08:seg==='new'?0.94:1);
-    const avgDur=A.byModel.reduce((a,b,i)=>a+(40+MODELS[i].pps*28)*b.sessions,0)/Math.max(1,T.modelSessions);
+    const engRate=A.byModel.reduce((a,b,i)=>a+MODELS[i].eng*b.sessions,0)/Math.max(1,T.modelSessions)*(seg==='ret'?1.08:seg==='new'?0.94:1)*0.7882;  // ×較正 → 実測エンゲージ率53.45%（GA4 28日）
+    const avgDur=A.byModel.reduce((a,b,i)=>a+(40+MODELS[i].pps*28)*b.sessions,0)/Math.max(1,T.modelSessions)*0.3531;  // ×較正 → 実測 平均110.2秒（GA4 28日）
 
     const models=MODELS.map((m,mi)=>{
       const bm=A.byModel[mi], pm=P.byModel[mi];
@@ -1336,7 +1373,7 @@ const GA = (() => {
         status: vsPace>=1.02?'ahead': vsPace>=0.92?'ontrack':'behind'};
     });
   }
-  const MTGT={kinto:146000,testdrive:15700,catalog:204000,newu:13300000}; // 検算済み（ahead/ontrack/behindが混在するバランス）
+  const MTGT={kinto:800,testdrive:85,catalog:1000,newu:92000}; // 月間目標＝直近実測ペース基準の仮置き（実測スケールに整合・8月は目標確定前）
   function score(){
     const ms=missions();
     const w=[.30,.28,.20,.22];
@@ -1361,17 +1398,20 @@ const GA = (() => {
     {scope:'Event', disp:'フォームステップ',       param:'form_step',          fill:.96, vals:'step1〜3 / complete', note:'購読・会員登録のEFO分析用'},
   ];
   const EVENTS_DICT=[
-    {ev:'page_view',              disp:'ページ表示',           scale:'pv'},
-    {ev:'view_title',             disp:'作品ページ 閲覧',       scale:'modelSessions'},
-    {ev:'episode_read_start',     disp:'試し読み 開始',         scale:'simStart'},
-    {ev:'episode_read_complete',  disp:'試し読み 完読',         goal:'estimate'},
-    {ev:'point_purchase',         disp:'ポイント購入',          goal:'kinto'},
-    {ev:'subscription_complete',  disp:'定期購読 申込',         goal:'testdrive'},
-    {ev:'signup_complete',        disp:'講談社ID 登録',         goal:'visit'},
-    {ev:'app_link_click',         disp:'アプリ誘導クリック',     goal:'catalog'},
-    {ev:'book_ec_click',          disp:'単行本 購入クリック',    goal:'service'},
-    {ev:'favorite_add',           disp:'お気に入り登録',         goal:'acc'},
-  ];
+    {ev:'page_view',           disp:'ページ表示（全ページ共通）',                    n:226814, scale:5},
+    {ev:'session_start',       disp:'セッション開始',                              n:151608, scale:5},
+    {ev:'user_engagement',     disp:'エンゲージメント（10秒以上滞在等）',            n:130860, scale:5},
+    {ev:'first_visit',         disp:'初回訪問（新規ユーザー）',                     n:97048,  scale:4},
+    {ev:'view_content',        disp:'コンテンツ閲覧（作品・記事詳細）',              n:70482,  scale:4},
+    {ev:'scroll',              disp:'90%スクロール到達',                           n:49477,  scale:4},
+    {ev:'nav_click',           disp:'グローバルナビのクリック',                     n:32504,  scale:4},
+    {ev:'click',               disp:'外部リンククリック',                          n:9656,   scale:3},
+    {ev:'view_search_results', disp:'サイト内検索の結果表示',                       n:9438,   scale:3},
+    {ev:'form_start',          disp:'フォーム入力開始（新人賞応募・問い合わせ）',     n:3278,   scale:2},
+    {ev:'form_submit',         disp:'フォーム送信完了 ＝ 実測コンバージョン',        n:2904,   scale:2},
+    {ev:'file_download',       disp:'ファイルダウンロード',                        n:562,    scale:1},
+    {ev:'gravure_link_click',  disp:'グラビア関連リンクのクリック',                 n:74,     scale:1},
+  ];  // すべてGA4実測（7/22〜8/18・28日間の実発生数）
 
   /* ---------- 会員ステータス ---------- */
   function memberData(range){
@@ -1414,7 +1454,8 @@ const GA = (() => {
     return AREAS.map((a,ai)=>({...a,sessions:v[ai]*(1+other/Math.max(1,s))}));
   }
 
-  return {DATES,CHANNELS,MODELS,GOODS,GOALS,AFFINITY,STAGES,AREAS,BUCKETS,RECENCY,DEVICES,AGES,EVENTS,
+  const REAL_PAGES=[["/smaga/",66242,76900],["/",14684,17703],["/series/",7835,8727],["/info/entry/20260715_magazineshop/",7541,8330],["/search/",6895,9341],["/bmaga/",5141,5892],["/info/entry/20260704_bluelock/",3995,4413],["/info/entry/202607_fairytail_cp/",3976,4370],["/info/entry/20260707_bluelock/",3942,4218],["/series/smaga/",3896,4752],["/comics/smaga/",3694,4201],["/comics/",3157,3560],["/info/entry/第116回新人漫画賞大発表/",2762,3044],["/comics/mpoke/this_month/",2428,2998],["/info/",2269,3273],["/series/mpoke/",2136,2586],["/comics/bmaga/this_month/",1985,2593],["/series/bmaga/",1821,2338],["/form_view/",1624,2319],["/info/entry/20260807_prisoners_cp/",1558,1813],["/special_page/hajimenoippo/",1536,1652],["/special_page/bluelock/",1489,1633]];  // GA4実測 上位ページ（7/22〜8/18・sessions,PV）
+  return {DATES,CHANNELS,MODELS,GOODS,GOALS,AFFINITY,STAGES,AREAS,BUCKETS,RECENCY,DEVICES,AGES,EVENTS,REAL_PAGES,
     CUSTOM_DIMS,EVENTS_DICT,DIMS,STAGE_LOGIN,
     agg,pairMatrix,sankey,funnel,comboData,rfMatrix,affinityAgg,campaigns,utmTree,missions,score,
     memberData,deviceAgg,demoAgg,areaAgg,affShare,goodsShare,areaShare,ageGender};
@@ -1557,7 +1598,7 @@ const SEGLBL={all:'全体',new:'新規ユーザー',ret:'再訪ユーザー'};
    ================================================== */
 function renderHQ(){
   const A=GA.agg(ST.range,ST.seg), SC=GA.score();
-  $('#navScore').textContent='Lv.'+Math.round(SC.score);
+  $('#navScore').textContent=Math.round(SC.score)+'点';
 
   /* --- ヒーロー --- */
   const ringR=62, circ=2*Math.PI*ringR, prog=SC.score/100;
@@ -1578,11 +1619,11 @@ function renderHQ(){
       </div>
       <div class="hmeta">
         <div class="hrow1"><h2>週マガ・マガポケ デジタル戦況</h2>${deltaPill(A.total.sessions,A.prevTotal.sessions)}</div>
-        <div class="lvl"><span class="lvn">Lv.${Math.round(SC.score)}</span><div class="xp"><i style="width:${(SC.score%10)*10}%"></i></div>
-          <span class="mono">次のLvまで ${(10-SC.score%10).toFixed(1)}pt</span></div>
+        <div class="lvl"><span class="lvn">総合スコア ${SC.score.toFixed(1)}</span><div class="xp"><i style="width:${SC.score}%"></i></div>
+          <span class="mono">100点満点・ミッション加重平均</span></div>
         <p class="hnote">選択期間のセッションは <span class="hl-b num">${fmtJP(A.total.sessions)}</span>（前期間比 <b class="num">${((A.total.sessions/A.prevTotal.sessions-1)*100).toFixed(1)}%</b>）、
         コンバージョンは <span class="hl num">${fmtJP(A.total.cv)}件</span>。
-        スコアは8月ミッション4本の達成ペースの加重平均。<span class="hl-r">アプリ誘導クリックだけがペース未達</span>で、Sティア昇格の残り条件になっている。</p>
+        スコアは8月ミッション4本の達成ペースの加重平均（目標は実測ペース基準の仮置き）。<span class="hl-r">アプリ誘導クリックがペース未達</span>で、これが総合評価を下げている主因。</p>
         <div class="qlog"><div class="qhead">イベントログ — 発表・キャンペーン</div>
           ${GA.EVENTS.slice(-4).reverse().map(e=>`<div class="qrow"><span class="qd num">${e.date.slice(5).replace('-','/')}</span><span>${e.label}</span><span class="qeff num" title="流入押上げ係数">×${e.amp.toFixed(1)}</span></div>`).join('')}
         </div>
@@ -2492,7 +2533,7 @@ function renderDict(){
       case 'fav':return A.total.modelSessions*.021;
       default:return 0;}
   };
-  const evs=GA.EVENTS_DICT.map(e=>({...e,n:evCount(e)}));
+  const evs=GA.EVENTS_DICT.map(e=>({...e,n:e.n!=null?e.n:evCount(e)}));  // 実測値を優先
   const evMax=Math.max(...evs.map(e=>e.n));
   $('#evTable').innerHTML=`<thead><tr><th>イベント名</th><th>内容</th><th class="num">発生数</th><th class="num">規模</th></tr></thead>
   <tbody>${evs.map(e=>`<tr>
@@ -2511,6 +2552,18 @@ function renderDict(){
     <p style="font-size:11px;color:var(--mut)">・大文字/日本語/スペース禁止（表記ゆれは自動でチャネル不明に落ちる）<br>・社内リンクにUTMを付けない（セッション断絶の原因）。サイト内バナーは <span class="utm">banner_id</span> を使用</p>`;
 
   const low=GA.CUSTOM_DIMS.filter(d=>d.fill<.8).sort((a,b)=>a.fill-b.fill);
+  /* 実測 上位ページ */
+  if($('#realPagesTable')){
+    const mx=GA.REAL_PAGES[0][1];
+    $('#realPagesTable').innerHTML=`<thead><tr><th>#</th><th>ページ</th><th class="num">セッション</th><th class="num">PV</th><th class="num">規模</th></tr></thead>
+    <tbody>${GA.REAL_PAGES.map((p,i)=>`<tr>
+      <td class="num" style="color:var(--mut)">${i+1}</td>
+      <td><a href="https://shonenmagazine.com${p[0]}" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:11px">${p[0]}</a>${p[0].startsWith('/special_page/')?' <span class="tag" style="color:var(--te);background:color-mix(in srgb,var(--te) 12%,transparent)">作品</span>':''}</td>
+      <td class="num">${CM(p[1])}</td><td class="num">${CM(p[2])}</td>
+      <td class="num"><div class="tbar" style="min-width:110px"><div class="bg"><i style="width:${Math.max(1.5,Math.pow(p[1]/mx,.45)*100).toFixed(0)}%;background:linear-gradient(90deg,var(--cy),var(--te))"></i></div></div></td>
+    </tr>`).join('')}</tbody>`;
+  }
+
   $('#dictInsight').innerHTML=`<span class="it">CHECK — 計測負債</span>
     <p>取得率80%未満のカスタムディメンションが <span class="hl-r">${low.length}本</span>：${low.map(d=>`<b>${d.disp}</b>（<span class="num">${pct(d.fill,0)}</span>）`).join('、')}。特に <span class="hl">推し作品と読了率</span> はプッシュ通知の出し分け・レコメンド精度に直結するため、お気に入り導線の強化とビューア計測の改修を推奨。</p>
     <p>UTM捕捉率は広告セッションの <b class="num">${pct(GA.utmTree(ST.range).tracked/GA.utmTree(ST.range).paidSess,0)}</b>【検証済み：選択期間の有料チャネル対象】。未捕捉分は媒体側の自動タグ（gclid等）で補完されるが、命名規約の徹底が第一。</p>`;
