@@ -4,6 +4,8 @@
 
 **▶ 公開URL: https://ketrketr2.github.io/shonen-magazine-ga-board/**
 
+課金・CVビュー末尾に**実測のみで算出する資産換算**を併設：流入価値 1.29億円/年（実測200日年換算 × 検索経由72.2% × 代替CPC30円）／平常ペース0.43億円/年。推定単価によるCV金額とは独立表記。
+
 実測ハイライト（7/22〜8/18）：セッション15.3万／ユーザー11.2万（S/U=1.37実測）／PV 22.7万（PV/S 1.478）／エンゲージ率53.5%・平均滞在110秒／実測CV＝フォーム送信2,904件（新人賞応募・問い合わせ）。実測スパイク：3/7（4.4万S/日）・3/16〜31・4/10〜30・5/29〜6/7・7/1〜15（最大5.6万S/日）。
 
 姉妹ボード：[TOYOTA GA4 COMMAND](https://ketrketr2.github.io/toyota-ga-board/) ／ [AI Visibility KPI Board（GEO）](https://github.com/ketrketr2/toyota-geo-board)

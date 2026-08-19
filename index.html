@@ -529,6 +529,34 @@ select.sel:focus{outline:1px solid var(--cy)}
           <div class="chart" id="chModelGoal"></div>
         </div>
         <div class="card s12 reveal"><div class="insight" id="goodsInsight"></div></div>
+
+        <!-- 実測ベースの金額換算（広告代替ロジック・推定CVとは独立） -->
+        <div class="card s12 reveal" style="border-color:color-mix(in srgb,#FFD84D 30%,var(--line))">
+          <div class="ct"><span class="bar" style="background:#FFD84D;box-shadow:0 0 8px rgba(255,216,77,.5)"></span><h3>実測トラフィックの資産換算（広告代替）</h3><span class="sub">ここは実測値のみで算出 — 上のCV金額（推定単価）とは独立した参考換算</span></div>
+          <div class="grid" style="gap:12px">
+            <div class="s4" style="min-width:0"><div style="background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:14px 16px;height:100%">
+              <div style="font-size:10.5px;color:var(--mut)">流入価値（実測200日 → 年換算）</div>
+              <div class="num" style="font-size:26px;font-weight:800;color:#FFD84D;margin:3px 0">1.29億円<span style="font-size:12px;color:var(--tx2)">/年</span></div>
+              <div style="font-family:var(--mono);font-size:10.5px;color:var(--tx2);background:var(--bg2);border:1px solid var(--line);border-radius:8px;padding:7px 10px;margin:6px 0">= 年間597.6万S × 検索経由72.2% × 代替CPC 30円</div>
+              <div style="font-size:10.3px;color:var(--mut);line-height:1.7">年間セッション＝実測200日327.4万Sの年換算（3〜7月の急増期間込み）。検索シェアはGA4実測。CPCは出版・エンタメ系実勢20〜50円の保守値（指名検索中心のため下寄り）</div>
+            </div></div>
+            <div class="s4" style="min-width:0"><div style="background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:14px 16px;height:100%">
+              <div style="font-size:10.5px;color:var(--mut)">平常ペース換算（直近28日基準）</div>
+              <div class="num" style="font-size:26px;font-weight:800;color:var(--tx);margin:3px 0">0.43億円<span style="font-size:12px;color:var(--tx2)">/年</span></div>
+              <div style="font-family:var(--mono);font-size:10.5px;color:var(--tx2);background:var(--bg2);border:1px solid var(--line);border-radius:8px;padding:7px 10px;margin:6px 0">= 200.0万S/年（実測15.3万S/28日 × 13.04） × 72.2% × 30円</div>
+              <div style="font-size:10.3px;color:var(--mut);line-height:1.7">バズを除いた保守ケース。実力値はこの2つの間 — 急増期間（アニメ・新連載等）が資産価値を約3倍に押し上げている</div>
+            </div></div>
+            <div class="s4" style="min-width:0"><div style="background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:14px 16px;height:100%">
+              <div style="font-size:10.5px;color:var(--mut)">参考分解（実測ベース）</div>
+              <div style="font-size:11.8px;color:var(--tx2);line-height:2.0;margin-top:4px">
+                SNSオーガニック流入 <b class="num" style="color:var(--tx)">年42.9万S</b>（SNS広告CPC60円代替 <b class="num">+0.26億円</b>）<br>
+                回遊価値 <b class="num" style="color:var(--tx)">+0.07億円</b>（実測PV/S 1.478・追加閲覧×CPM400円）<br>
+                AIアシスタント流入 <b class="num" style="color:#FFD84D">668S/28日（実測）</b> — GEO資産の芽
+              </div>
+              <div style="font-size:10.3px;color:var(--mut);line-height:1.7;margin-top:5px">課金の実額は、マガポケ本体プロパティの接続かこのプロパティへのキーイベント設定後に実測へ置換</div>
+            </div></div>
+          </div>
+        </div>
       </div>
     </section>
 
