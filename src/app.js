@@ -1,6 +1,6 @@
 /* ============ アプリ制御：ナビ・フィルタ・⌘K・トースト ============ */
-const RENDERERS={hq:renderHQ,garage:renderGarage,goods:renderGoods,flow:renderFlow,acq:renderAcq,aud:renderAud,lab:renderLab,dict:renderDict};
-const VIEW_LABELS={hq:'編集部HQ',garage:'連載ラインナップ',goods:'課金・CV',flow:'読者動線マップ',acq:'集客・プロモ',aud:'読者オーディエンス',lab:'クロス分析ラボ',dict:'計測設計'};
+const RENDERERS={hq:renderHQ,garage:renderGarage,studio:renderStudio,goods:renderGoods,flow:renderFlow,acq:renderAcq,aud:renderAud,lab:renderLab,dict:renderDict};
+const VIEW_LABELS={hq:'編集部HQ',garage:'連載ラインナップ',studio:'作品スタジオ',goods:'課金・CV',flow:'読者動線マップ',acq:'集客・プロモ',aud:'読者オーディエンス',lab:'クロス分析ラボ',dict:'計測設計'};
 const rendered={};
 
 function renderView(v){
@@ -75,7 +75,7 @@ let ckItems=[],ckSel=0;
 function buildCk(){
   ckItems=[
     ...Object.entries(VIEW_LABELS).map(([v,l])=>({t:l,k:'ビュー',act:()=>showView(v)})),
-    ...GA.MODELS.map(m=>({t:m.name,k:'作品 → 詳細カルテ',act:()=>{showView('garage');setTimeout(()=>openModelModal(m.id),80)}})),
+    ...GA.MODELS.map(m=>({t:m.name,k:'作品スタジオで開く',act:()=>{ST.studio.title=m.id;ST.dirty.studio=true;showView('studio')}})),
     ...GA.campaigns(90).map(c=>({t:c.name,k:'キャンペーン → 広告リーグ',act:()=>showView('acq')})),
     {t:'クロス：作品×アフィニティ（CVR）',k:'ラボ',act:()=>{ST.lab={row:'model',col:'affinity',metric:'cvr'};$('#labRow').dataset.built='';showView('lab');ST.dirty.lab=true;renderView('lab')}},
   ];

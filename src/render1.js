@@ -6,7 +6,7 @@ const $$=(s,el=document)=>Array.from(el.querySelectorAll(s));
 const ST={range:28,seg:'all',view:'hq',trendMode:'both',
   garage:{sort:'sessions',cat:'all'},
   lab:{row:'model',col:'channel',metric:'sessions'},
-  vs:{a:'bluelock',b:'shanfro'}, funnelGoal:'kinto',
+  vs:{a:'bluelock',b:'shanfro'}, funnelGoal:'kinto', studio:{title:'bluelock'},
   dirty:{}, campSort:{key:'roas',dir:-1}, leagueSort:{key:'sessions',dir:-1}};
 
 /* ---------- 表示フォーマッタ ---------- */
@@ -391,7 +391,7 @@ function openModelModal(id){
         <span class="cat" style="font-size:10px;border:1px solid var(--line2);border-radius:5px;padding:0 7px;color:var(--tx2)">${m.cat}</span>
         <span class="mono">${m.price}</span><div class="hex sm ${m.tier}">${m.tier}</div></div>
       <div style="font-size:11px;color:var(--mut)">ランク #${m.rank} ／ セッション ${fmtJP(m.sessions)} ${deltaPill(m.sessions,m.prevSessions)} ／ CVR ${pct(m.cvr,2)}</div>
-    </div><button class="close" id="mClose">閉じる esc</button></div>
+    </div><button class="close" id="mStudio" style="margin-left:auto;border-color:color-mix(in srgb,var(--te) 45%,var(--line2));color:var(--te)">作品スタジオで開く →</button><button class="close" id="mClose" style="margin-left:8px">閉じる esc</button></div>
     <div class="mgrid2">
       <div class="mcell"><h4>日次セッション推移</h4><div id="mdTrend" style="min-height:200px"></div></div>
       <div class="mcell"><h4>流入チャネル構成</h4><div id="mdCh" style="min-height:200px"></div></div>
@@ -400,6 +400,7 @@ function openModelModal(id){
     </div>`;
   $('#modelModal').classList.add('on');
   $('#mClose').onclick=closeModal;
+  $('#mStudio').onclick=()=>{closeModal();ST.studio.title=id;ST.dirty.studio=true;showView('studio')};
   const mk=(id2)=>{const c=echarts.init($('#'+id2));modalCharts.push(c);return c};
   mk('mdTrend').setOption(baseOpt({
     tooltip:Object.assign({},TIP,{trigger:'axis',valueFormatter:v=>fmtJP(v)}),

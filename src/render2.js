@@ -433,3 +433,212 @@ function renderDict(){
     <p>取得率80%未満のカスタムディメンションが <span class="hl-r">${low.length}本</span>：${low.map(d=>`<b>${d.disp}</b>（<span class="num">${pct(d.fill,0)}</span>）`).join('、')}。特に <span class="hl">推し作品と読了率</span> はプッシュ通知の出し分け・レコメンド精度に直結するため、お気に入り導線の強化とビューア計測の改修を推奨。</p>
     <p>UTM捕捉率は広告セッションの <b class="num">${pct(GA.utmTree(ST.range).tracked/GA.utmTree(ST.range).paidSess,0)}</b>【検証済み：選択期間の有料チャネル対象】。未捕捉分は媒体側の自動タグ（gclid等）で補完されるが、命名規約の徹底が第一。</p>`;
 }
+
+/* ==================================================
+   VIEW: 作品スタジオ（PPMポートフォリオ＋ディープダイブ）
+   ================================================== */
+const GENRE_LIST=[...new Set(GA.MODELS.map(m=>m.cat))];
+const GENRE_COLOR=Object.fromEntries(GENRE_LIST.map((g,i)=>[g,CAT8[i%8]]));
+function cosSim(a,b){let d=0,na=0,nb=0;for(let i=0;i<a.length;i++){d+=a[i]*b[i];na+=a[i]*a[i];nb+=b[i]*b[i]}return d/Math.sqrt(na*nb)}
+
+function renderStudio(){
+  const A=GA.agg(ST.range,ST.seg);
+
+  /* ---- PPM ポートフォリオ ---- */
+  const meds=[...A.models.map(m=>m.sessions)].sort((a,b)=>a-b);
+  const medS=meds[Math.floor(meds.length/2)];
+  const maxCv=Math.max(...A.models.map(m=>m.cv));
+  const pts=A.models.map(m=>({m,x:m.sessions,y:+((m.sessions/m.prevSessions-1)*100).toFixed(1)}));
+  const ymin=Math.min(...pts.map(p=>p.y)), ymax=Math.max(...pts.map(p=>p.y));
+  E('chPpm').setOption(baseOpt({
+    tooltip:Object.assign({},TIP,{formatter:p=>{
+      const m=p.data.m;
+      return `<b>${m.name}</b>（${m.cat}）<br>セッション <b>${fmtJP(m.sessions)}</b> ／ 前期間比 <b>${(p.data.value[1]>0?'+':'')+p.data.value[1]}%</b><br>CV ${fmtJP(m.cv)} ／ CVR ${pct(m.cvr,2)}<br><span style="color:${MUT};font-size:11px">クリックで下にディープダイブを展開</span>`;}}),
+    legend:{top:0,textStyle:{color:TX2,fontSize:10.5},itemWidth:11,itemHeight:11,icon:'roundRect',itemGap:9,
+      data:GENRE_LIST},
+    grid:{left:14,right:30,top:34,bottom:8,containLabel:true},
+    xAxis:Object.assign(axY(),{type:'log',
+      axisLabel:{formatter:v=>fmtJP(v),color:MUT,fontSize:10,fontFamily:MONOF}}),
+    yAxis:axY({axisLabel:{formatter:v=>v+'%',color:MUT,fontSize:10,fontFamily:MONOF}}),
+    series:GENRE_LIST.map(g=>({name:g,type:'scatter',
+      symbolSize:(val,params)=>10+Math.sqrt(params.data.m.cv/maxCv)*38,
+      itemStyle:{color:GENRE_COLOR[g],opacity:.9,borderColor:'#0A1120',borderWidth:1.5,
+        shadowBlur:8,shadowColor:GENRE_COLOR[g]+'55'},
+      label:{show:true,position:'top',distance:3,color:TX2,fontSize:10,fontFamily:FONT,
+        formatter:p=>p.data.m.name.length>8?p.data.m.name.slice(0,8)+'…':p.data.m.name},
+      emphasis:{scale:1.2,label:{color:TX,fontWeight:700}},
+      labelLayout:{hideOverlap:true},
+      data:pts.filter(p=>p.m.cat===g).map(p=>({value:[p.x,p.y],m:p.m}))})),
+    graphic:[
+      {type:'text',right:34,top:40,style:{text:'⭐ スター（看板）',fill:GD,fontSize:11,fontWeight:700,fontFamily:FONT}},
+      {type:'text',right:34,bottom:44,style:{text:'💰 金のなる木（規模大・安定）',fill:TX2,fontSize:11,fontFamily:FONT}},
+      {type:'text',left:70,top:40,style:{text:'🚀 スター候補（急上昇）',fill:TE,fontSize:11,fontWeight:700,fontFamily:FONT}},
+      {type:'text',left:70,bottom:44,style:{text:'🔧 テコ入れ検討',fill:MUT,fontSize:11,fontFamily:FONT}},
+    ]
+  }),true);
+  charts['chPpm'].off('click');
+  charts['chPpm'].on('click',p=>{if(p.data&&p.data.m){ST.studio.title=p.data.m.id;drawStudioDetail()}});
+  // 象限ライン（markLine はシリーズ単位のため graphic で縦横線を引かず、splitLineで代替）
+  charts['chPpm'].setOption({series:[{markLine:{silent:true,symbol:'none',animation:false,
+    lineStyle:{color:LINE2,type:[5,5]},label:{show:false},
+    data:[{xAxis:medS},{yAxis:0}]}}]});
+
+  /* ---- セレクタ ---- */
+  $('#studioSel').innerHTML=A.models.map(m=>
+    `<span class="chip ${m.id===ST.studio.title?'on':''}" data-st="${m.id}">
+      <span class="sw" style="background:${GENRE_COLOR[m.cat]}"></span>${m.name}</span>`).join('');
+  $('#studioSel').onclick=e=>{const c=e.target.closest('[data-st]');if(!c)return;
+    ST.studio.title=c.dataset.st;drawStudioDetail()};
+
+  drawStudioDetail();
+}
+
+function drawStudioDetail(){
+  const A=GA.agg(ST.range,ST.seg);
+  const m=A.models.find(x=>x.id===ST.studio.title)||A.models[0];
+  const M0=GA.MODELS[m.mi];
+  $$('#studioSel .chip').forEach(c=>c.classList.toggle('on',c.dataset.st===m.id));
+
+  /* ヒーロー */
+  const g=(m.sessions/m.prevSessions-1)*100;
+  const kpis=[
+    ['セッション',fmtJP(m.sessions),deltaPill(m.sessions,m.prevSessions)],
+    ['CVR',pct(m.cvr,2),''],
+    ['CV合計',fmtJP(m.cv),deltaPill(m.cv,m.cvPrev)],
+    ['再訪率',pct(m.retShare,0),''],
+    ['広告依存度',pct(m.adShare,0),''],
+    ['試し読み到達',pct(m.toolSessions/m.sessions,0),''],
+  ];
+  $('#studioHero').innerHTML=`
+    <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+      <span style="color:${GENRE_COLOR[m.cat]}">${carSvg(m.icon)}</span>
+      <div style="min-width:200px">
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <b style="font-size:20px">${m.name}</b>
+          <span class="tag" style="color:${GENRE_COLOR[m.cat]};background:color-mix(in srgb,${GENRE_COLOR[m.cat]} 13%,transparent)">${m.cat}</span>
+          <span class="mono">${m.price}</span>
+          <div class="hex sm ${m.tier}">${m.tier}</div>
+          <span class="mono">ランク #${m.rank}</span>
+        </div>
+        <div style="font-size:11px;color:var(--mut);margin-top:3px">選択期間 ${A.from.slice(5).replace('-','/')} 〜 ${A.to.slice(5).replace('-','/')} ／ セグメント：${SEGLBL[ST.seg]}</div>
+      </div>
+      <div style="margin-left:auto;display:flex;gap:10px;flex-wrap:wrap">
+        ${kpis.map(([l,v,d])=>`<div style="border:1px solid var(--line);border-radius:11px;background:var(--card2);padding:8px 14px;min-width:96px">
+          <div style="font-size:9.5px;color:var(--mut);letter-spacing:.05em">${l}</div>
+          <div class="num" style="font-size:17px;font-weight:800">${v}</div>
+          <div style="font-size:10px">${d}</div></div>`).join('')}
+      </div>
+    </div>`;
+
+  /* トレンド */
+  $('#stTrendSub').textContent='注釈＝この作品・全体のイベント';
+  const evLines=GA.EVENTS.filter(e=>A.dates.includes(e.date)&&(e.model===m.id||e.model===null)).map(e=>({
+    xAxis:e.date.slice(5).replace('-','/'),
+    label:{formatter:e.label.length>12?e.label.slice(0,12)+'…':e.label,color:e.model===m.id?TE:MUT,fontSize:9.5},
+    lineStyle:{color:e.model===m.id?TE+'88':LINE2,type:[4,4]}}));
+  E('chStTrend').setOption(baseOpt({
+    tooltip:Object.assign({},TIP,{trigger:'axis',valueFormatter:v=>fmtJP(v)}),
+    grid:{left:8,right:14,top:30,bottom:6,containLabel:true},
+    xAxis:axX({data:A.dates.map(d=>d.slice(5).replace('-','/')),boundaryGap:false,
+      axisLabel:{interval:Math.floor(A.dates.length/8),color:MUT,fontSize:10,fontFamily:MONOF}}),
+    yAxis:axY({axisLabel:{formatter:v=>fmtJP(v),color:MUT,fontSize:10,fontFamily:MONOF}}),
+    series:[{name:'セッション',type:'line',data:m.daily.map(v=>Math.round(v)),symbol:'none',
+      lineStyle:{width:2.4,color:GENRE_COLOR[m.cat]},
+      areaStyle:{color:{type:'linear',x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:GENRE_COLOR[m.cat]+'44'},{offset:1,color:GENRE_COLOR[m.cat]+'00'}]}},
+      markLine:{symbol:'none',silent:true,data:evLines,animation:false}}]
+  }),true);
+
+  /* チャネル */
+  E('chStCh').setOption(baseOpt({
+    tooltip:Object.assign({},TIP,{valueFormatter:v=>fmtJP(v)}),
+    legend:{bottom:0,textStyle:{color:TX2,fontSize:9.5},itemWidth:9,itemHeight:9,icon:'roundRect',itemGap:6},
+    series:[{type:'pie',radius:['46%','69%'],center:['50%','40%'],
+      itemStyle:{borderColor:'#0A1120',borderWidth:2,borderRadius:4},label:{show:false},
+      data:GA.CHANNELS.map((c,ci)=>({name:c.name,value:Math.round(m.byChannel[ci]),itemStyle:{color:c.color}}))}],
+    graphic:[{type:'text',left:'center',top:'34%',style:{text:pct(m.adShare,0),fill:TX,fontSize:18,fontWeight:800,fontFamily:MONOF}},
+             {type:'text',left:'center',top:'44%',style:{text:'広告比率',fill:MUT,fontSize:10,fontFamily:FONT}}]
+  }),true);
+
+  /* CV内訳 */
+  E('chStCv').setOption(baseOpt({
+    tooltip:Object.assign({},TIP,{valueFormatter:v=>CM(v)+'件'}),
+    grid:{left:8,right:44,top:8,bottom:6,containLabel:true},
+    xAxis:axY({axisLabel:{formatter:v=>fmtJP(v),color:MUT,fontSize:9.5,fontFamily:MONOF}}),
+    yAxis:axX({type:'category',data:GA.GOALS.map(g=>g.name.length>11?g.name.slice(0,11)+'…':g.name).reverse(),
+      axisLabel:{color:TX2,fontSize:10.5,fontFamily:FONT}}),
+    series:[{type:'bar',barWidth:13,
+      itemStyle:{borderRadius:[0,4,4,0],color:p=>CAT8[(GA.GOALS.length-1-p.dataIndex)%8]},
+      label:{show:true,position:'right',formatter:p=>CM(p.value),color:TX2,fontSize:9.5,fontFamily:MONOF},
+      data:GA.GOALS.map(g=>Math.round(m.cvGoal[g.id])).reverse()}]
+  }),true);
+
+  /* アフィニティ指数（全体=100） */
+  const affAll=GA.affinityAgg(ST.range,ST.seg);
+  const shT=GA.affShare(M0);
+  const idx=GA.AFFINITY.map((af,ai)=>({name:af.name,v:+(shT[af.id]/affAll[ai].share*100-100).toFixed(1)}));
+  E('chStAff').setOption(baseOpt({
+    tooltip:Object.assign({},TIP,{formatter:p=>`<b>${idx[GA.AFFINITY.length-1-p.dataIndex].name}</b><br>指数 <b>${(100+p.value).toFixed(0)}</b>（全体=100）`}),
+    grid:{left:8,right:36,top:8,bottom:6,containLabel:true},
+    xAxis:axY({min:-80,max:120,axisLabel:{formatter:v=>String(100+v),color:MUT,fontSize:9.5,fontFamily:MONOF}}),
+    yAxis:axX({type:'category',data:idx.map(x=>x.name).reverse(),axisLabel:{color:TX2,fontSize:10.5,fontFamily:FONT}}),
+    series:[{type:'bar',barWidth:12,
+      itemStyle:{color:p=>p.value>=0?'#199E70':'#E66767',borderRadius:4},
+      label:{show:true,position:p=>p.value>=0?'right':'left',formatter:p=>(100+p.value).toFixed(0),color:TX2,fontSize:9.5,fontFamily:MONOF},
+      markLine:{symbol:'none',silent:true,data:[{xAxis:0}],lineStyle:{color:'#8FA3B8',type:[4,3]},label:{show:false}},
+      data:idx.map(x=>x.v).reverse()}]
+  }),true);
+
+  /* 年齢×性別 */
+  const gAG=GA.ageGender(M0);
+  E('chStDemo').setOption(baseOpt({
+    tooltip:Object.assign({},TIP,{formatter:p=>`<b>${p.seriesName} ${p.name}</b><br>読者構成 ${Math.abs(p.value).toFixed(1)}%`}),
+    legend:{top:0,textStyle:{color:TX2,fontSize:11},itemWidth:11,itemHeight:11,icon:'roundRect'},
+    grid:{left:8,right:16,top:30,bottom:4,containLabel:true},
+    xAxis:axY({axisLabel:{formatter:v=>Math.abs(v)+'%',color:MUT,fontSize:9.5,fontFamily:MONOF}}),
+    yAxis:axX({type:'category',data:GA.AGES,axisLabel:{color:TX2,fontSize:10.5,fontFamily:MONOF}}),
+    series:[
+      {name:'男性',type:'bar',stack:'d',barWidth:14,itemStyle:{color:CAT8[0],borderRadius:[4,0,0,4]},
+        data:gAG.male.map(v=>-+(v*100).toFixed(1))},
+      {name:'女性',type:'bar',stack:'d',barWidth:14,itemStyle:{color:CAT8[4],borderRadius:[0,4,4,0]},
+        data:gAG.female.map(v=>+(v*100).toFixed(1))},
+    ]
+  }),true);
+
+  /* 読者が近い作品（コサイン類似度） */
+  const baseSh=GA.AFFINITY.map((af,ai)=>affAll[ai].share);
+  const vec=mm=>GA.AFFINITY.map((af,ai)=>GA.affShare(mm)[af.id]-baseSh[ai]);
+  const v0=vec(M0);
+  const sims=GA.MODELS.filter(x=>x.id!==m.id)
+    .map(x=>({x,s:Math.max(0,cosSim(v0,vec(x)))}))
+    .sort((a,b)=>b.s-a.s).slice(0,3);
+  const affN=Object.fromEntries(GA.AFFINITY.map(a=>[a.id,a.name]));
+  $('#stSimilar').innerHTML=sims.map((s,i)=>{
+    const shX=GA.affShare(s.x);
+    const common=GA.AFFINITY.map(af=>({n:affN[af.id],v:Math.min(shT[af.id],shX[af.id])}))
+      .sort((a,b)=>b.v-a.v)[0];
+    const am=A.models.find(z=>z.id===s.x.id);
+    return `<div class="mrow" data-sim="${s.x.id}" style="cursor:pointer">
+      <span class="medal ${i===0?'m1':i===1?'m2':'m3'}">${i+1}</span>
+      <div class="mm"><div class="mt"><b>${s.x.name}</b><span class="mnum">${s.x.cat} ／ ${fmtJP(am.sessions)}セッション</span></div>
+        <div class="mbar"><i class="ontrack" style="width:${(s.s*100).toFixed(0)}%"></i></div></div>
+      <span class="st ontrack">類似 ${(s.s*100).toFixed(0)}%・共通「${common.n}」</span>
+    </div>`;
+  }).join('');
+  $$('#stSimilar [data-sim]').forEach(el=>el.onclick=()=>{ST.studio.title=el.dataset.sim;drawStudioDetail()});
+
+  /* インサイト */
+  const chMax=GA.CHANNELS.map((c,ci)=>({c,v:m.byChannel[ci]/m.sessions})).sort((a,b)=>b.v-a.v)[0];
+  const avgCvr=A.total.cv/A.total.sessions;
+  const topGoal=GA.GOALS.map(gg=>({gg,v:m.cvGoal[gg.id]})).sort((a,b)=>b.v-a.v).filter(x=>x.gg.id!=='estimate'&&x.gg.id!=='acc')[0];
+  const kanketsu=m.price.startsWith('完結');
+  $('#studioInsight').innerHTML=`<span class="it">INSIGHT — ${m.name}</span>
+    <p>主要流入は <span class="hl-b">${chMax.c.name}（${pct(chMax.v,0)}）</span>。前期間比 <b class="num">${(g>0?'+':'')+g.toFixed(1)}%</b> で、CVRは <b class="num">${pct(m.cvr,2)}</b>（全体平均の <b class="num">${(m.cvr/avgCvr).toFixed(1)}倍</b>）。マイクロCVを除く最大の成果は <span class="hl">${topGoal.gg.name} ${CM(topGoal.v)}件</span>。</p>
+    <p>${kanketsu
+      ? `<span class="hl-g">完結作のロングテール型</span>。指名検索・外部流入で読まれ続けており、単行本ECと全巻無料などの再燃企画が価値の中心。`
+      : m.adShare>.45
+        ? `<span class="hl-r">広告依存度 ${pct(m.adShare,0)}</span> と高く、キャンペーン終了後の自然流入への着地が今後の論点。`
+        : `広告依存度 ${pct(m.adShare,0)} と健全で、<span class="hl-g">オーガニック・再訪中心の自走型</span>。`}
+    読者が最も近いのは <span class="hl">${sims[0].x.name}（類似 ${(sims[0].s*100).toFixed(0)}%）</span>で、相互レコメンド・合同フェアの筆頭候補。</p>`;
+
+  requestAnimationFrame(()=>{['chStTrend','chStCh','chStCv','chStAff','chStDemo'].forEach(id=>{try{charts[id].resize()}catch(e){}})});
+}

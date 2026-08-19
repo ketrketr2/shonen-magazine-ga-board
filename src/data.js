@@ -729,5 +729,5 @@ const GA = (() => {
   return {DATES,CHANNELS,MODELS,GOODS,GOALS,AFFINITY,STAGES,AREAS,BUCKETS,RECENCY,DEVICES,AGES,EVENTS,
     CUSTOM_DIMS,EVENTS_DICT,DIMS,STAGE_LOGIN,
     agg,pairMatrix,sankey,funnel,comboData,rfMatrix,affinityAgg,campaigns,utmTree,missions,score,
-    memberData,deviceAgg,demoAgg,areaAgg,affShare,goodsShare,areaShare};
+    memberData,deviceAgg,demoAgg,areaAgg,affShare,goodsShare,areaShare,ageGender};
 })();

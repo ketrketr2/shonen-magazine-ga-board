@@ -12,6 +12,7 @@
     <nav class="nav" id="nav">
       <button data-view="hq" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>編集部HQ<span class="lv" id="navScore">—</span></button>
       <button data-view="garage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h6a3 3 0 0 1 3 3v13a2.5 2.5 0 0 0-2.5-2.5H4z"/><path d="M20 4h-6a3 3 0 0 0-3 3v13a2.5 2.5 0 0 1 2.5-2.5H20z"/></svg>連載ラインナップ</button>
+      <button data-view="studio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7.2l1.5 3.1 3.4.4-2.5 2.3.7 3.4-3.1-1.7-3.1 1.7.7-3.4-2.5-2.3 3.4-.4z"/></svg>作品スタジオ</button>
       <button data-view="goods"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 7l-8-4-8 4v10l8 4 8-4z"/><path d="M4 7l8 4 8-4"/><path d="M12 11v10"/></svg>課金・CV</button>
       <button data-view="flow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5h6v5H4zM14 3h6v5h-6zM14 13h6v5h-6zM4 15h6v6H4z"/><path d="M10 7h4M10 17h4"/></svg>読者動線マップ</button>
       <button data-view="acq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></svg>集客・プロモ</button>
@@ -99,9 +100,49 @@
       </div>
     </section>
 
+    <!-- ==== VIEW: 作品スタジオ ==== -->
+    <section class="view" data-view="studio">
+      <div class="vhead"><span class="sector">SECTOR 02</span><h1>作品スタジオ</h1><span class="desc">ポートフォリオ俯瞰 → 1作品ディープダイブ</span></div>
+      <div class="grid">
+        <div class="card glow s12 reveal">
+          <div class="ct"><span class="bar"></span><h3>作品ポートフォリオ（規模 × 成長）</h3><span class="sub">横=セッション規模（対数） ／ 縦=前期間比 ／ 円の大きさ=CV量 ／ 色=ジャンル ／ バブルをクリックで下に展開</span></div>
+          <div class="chart" id="chPpm" style="min-height:440px"></div>
+        </div>
+        <div class="card s12 reveal" style="padding:13px 20px">
+          <div class="ct" style="margin-bottom:0"><span class="bar"></span><h3>作品を選択</h3><div class="r" id="studioSel"></div></div>
+        </div>
+        <div class="card s12 reveal" id="studioHero"></div>
+        <div class="card glow s7 reveal">
+          <div class="ct"><span class="bar"></span><h3>日次セッション</h3><span class="sub" id="stTrendSub"></span></div>
+          <div class="chart" id="chStTrend"></div>
+        </div>
+        <div class="card glow s5 reveal">
+          <div class="ct"><span class="bar"></span><h3>流入チャネル構成</h3></div>
+          <div class="chart" id="chStCh"></div>
+        </div>
+        <div class="card glow s6 reveal">
+          <div class="ct"><span class="bar"></span><h3>コンバージョン内訳</h3><span class="sub">8種CV・この作品のみ</span></div>
+          <div class="chart" id="chStCv"></div>
+        </div>
+        <div class="card glow s6 reveal">
+          <div class="ct"><span class="bar"></span><h3>読者の興味関心プロファイル</h3><span class="sub">全体読者=100とした指数</span></div>
+          <div class="chart" id="chStAff"></div>
+        </div>
+        <div class="card glow s6 reveal">
+          <div class="ct"><span class="bar"></span><h3>年齢 × 性別</h3><span class="sub">この作品の読者構成（推定）</span></div>
+          <div class="chart" id="chStDemo"></div>
+        </div>
+        <div class="card glow s6 reveal">
+          <div class="ct"><span class="bar"></span><h3>読者が近い作品</h3><span class="sub">興味関心プロファイルの類似度 ／ クリックで切替</span></div>
+          <div id="stSimilar" style="display:flex;flex-direction:column;gap:10px;padding-top:2px"></div>
+        </div>
+        <div class="card s12 reveal"><div class="insight" id="studioInsight"></div></div>
+      </div>
+    </section>
+
     <!-- ==== VIEW: 課金・CV ==== -->
     <section class="view" data-view="goods">
-      <div class="vhead"><span class="sector">SECTOR 02</span><h1>課金・CV</h1><span class="desc">定期購読・ポイント・単行本EC・アプリ送客・読書エンゲージの成果</span></div>
+      <div class="vhead"><span class="sector">SECTOR 03</span><h1>課金・CV</h1><span class="desc">定期購読・ポイント・単行本EC・アプリ送客・読書エンゲージの成果</span></div>
       <div class="grid">
         <div id="goodsCards" style="display:contents"></div>
         <div class="card glow s7 reveal">
@@ -131,7 +172,7 @@
 
     <!-- ==== VIEW: 読者動線マップ ==== -->
     <section class="view" data-view="flow">
-      <div class="vhead"><span class="sector">SECTOR 03</span><h1>読者動線マップ</h1><span class="desc">流入 → 試し読み → 課金のルート全体図</span></div>
+      <div class="vhead"><span class="sector">SECTOR 04</span><h1>読者動線マップ</h1><span class="desc">流入 → 試し読み → 課金のルート全体図</span></div>
       <div class="grid">
         <div class="card s12 reveal">
           <div class="ct"><span class="bar"></span><h3>ステージクリア状況</h3><span class="sub">左から右へ進むほど深い読書・課金行動</span></div>
@@ -155,7 +196,7 @@
 
     <!-- ==== VIEW: 集客・プロモ ==== -->
     <section class="view" data-view="acq">
-      <div class="vhead"><span class="sector">SECTOR 04</span><h1>集客・プロモ</h1><span class="desc">チャネル・キャンペーン・トラッキングコード（UTM）の成績</span></div>
+      <div class="vhead"><span class="sector">SECTOR 05</span><h1>集客・プロモ</h1><span class="desc">チャネル・キャンペーン・トラッキングコード（UTM）の成績</span></div>
       <div class="grid">
         <div class="card s12 reveal">
           <div class="ct"><span class="bar"></span><h3>チャネル成績表</h3><span class="sub" id="acqSub"></span></div>
@@ -179,7 +220,7 @@
 
     <!-- ==== VIEW: 読者オーディエンス ==== -->
     <section class="view" data-view="aud">
-      <div class="vhead"><span class="sector">SECTOR 05</span><h1>読者オーディエンス</h1><span class="desc">新規・再訪、アフィニティ、属性のプロファイル</span></div>
+      <div class="vhead"><span class="sector">SECTOR 06</span><h1>読者オーディエンス</h1><span class="desc">新規・再訪、アフィニティ、属性のプロファイル</span></div>
       <div class="grid">
         <div class="card glow s4 reveal">
           <div class="ct"><span class="bar"></span><h3>新規 × 再訪</h3><span class="sub">セッション構成</span></div>
@@ -219,7 +260,7 @@
 
     <!-- ==== VIEW: クロス分析ラボ ==== -->
     <section class="view" data-view="lab">
-      <div class="vhead"><span class="sector">SECTOR 06</span><h1>クロス分析ラボ</h1><span class="desc">6ディメンション × 4指標を自由にクロス</span></div>
+      <div class="vhead"><span class="sector">SECTOR 07</span><h1>クロス分析ラボ</h1><span class="desc">6ディメンション × 4指標を自由にクロス</span></div>
       <div class="grid">
         <div class="card s12 reveal">
           <div class="ct"><span class="bar"></span><h3>おすすめクロス</h3></div>
@@ -250,7 +291,7 @@
 
     <!-- ==== VIEW: 計測設計 ==== -->
     <section class="view" data-view="dict">
-      <div class="vhead"><span class="sector">SECTOR 07</span><h1>計測設計</h1><span class="desc">カスタムディメンション・イベント・UTM命名の管理台帳</span></div>
+      <div class="vhead"><span class="sector">SECTOR 08</span><h1>計測設計</h1><span class="desc">カスタムディメンション・イベント・UTM命名の管理台帳</span></div>
       <div class="grid">
         <div class="card s12 reveal">
           <div class="ct"><span class="bar"></span><h3>カスタムディメンション台帳</h3><span class="sub">GA4 プロパティ設定と同期（デモ）</span></div>
