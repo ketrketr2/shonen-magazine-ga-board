@@ -1,0 +1,281 @@
+<div class="app">
+  <!-- ============ サイドバー ============ -->
+  <aside class="side">
+    <div class="brand">
+      <div class="logo">M</div>
+      <div>
+        <div class="t1">MAGAZINE</div>
+        <div class="t2">GA4 COMMAND</div>
+      </div>
+    </div>
+    <div class="sgroup">COMMAND</div>
+    <nav class="nav" id="nav">
+      <button data-view="hq" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>編集部HQ<span class="lv" id="navScore">—</span></button>
+      <button data-view="garage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h6a3 3 0 0 1 3 3v13a2.5 2.5 0 0 0-2.5-2.5H4z"/><path d="M20 4h-6a3 3 0 0 0-3 3v13a2.5 2.5 0 0 1 2.5-2.5H20z"/></svg>連載ラインナップ</button>
+      <button data-view="goods"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 7l-8-4-8 4v10l8 4 8-4z"/><path d="M4 7l8 4 8-4"/><path d="M12 11v10"/></svg>課金・CV</button>
+      <button data-view="flow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5h6v5H4zM14 3h6v5h-6zM14 13h6v5h-6zM4 15h6v6H4z"/><path d="M10 7h4M10 17h4"/></svg>読者動線マップ</button>
+      <button data-view="acq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></svg>集客・プロモ</button>
+      <button data-view="aud"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3.4"/><path d="M2.5 20c.7-3.6 3.3-5.5 6.5-5.5S14.8 16.4 15.5 20"/><circle cx="17" cy="9" r="2.6"/><path d="M16.4 14.6c2.8.2 4.6 1.9 5.1 4.9"/></svg>読者オーディエンス</button>
+      <button data-view="lab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 3v6L4 19a2 2 0 0 0 1.8 3h12.4A2 2 0 0 0 20 19L15 9V3"/><path d="M7 3h10"/><path d="M7.5 14h9"/></svg>クロス分析ラボ</button>
+      <button data-view="dict"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/><path d="M9 7h7M9 11h5"/></svg>計測設計</button>
+    </nav>
+    <div class="sfoot">
+      データ最終日 <span class="num">2026-08-18</span><br>
+      GitHub Actions で日次更新（予定）<br>
+      <span id="footMode">DEMO MODE</span>
+    </div>
+  </aside>
+
+  <!-- ============ メイン ============ -->
+  <div class="main">
+    <header class="top">
+      <span class="menubtn" id="menubtn">☰ メニュー</span>
+      <div class="crumb"><b>少年マガジン / マガポケ</b><span style="color:var(--mut)">／</span><span id="crumbView">編集部HQ</span>
+        <span class="dm" title="実データ接続前の合成デモデータで動作中">DEMO DATA</span></div>
+      <div class="rng" id="rngCtl">
+        <button data-r="7">7日</button><button data-r="28" class="on">28日</button><button data-r="90">90日</button>
+      </div>
+      <div class="seg" id="segCtl">
+        <button data-s="all" class="on">全体</button><button data-s="new">新規</button><button data-s="ret">再訪</button>
+      </div>
+      <span class="period" id="periodLbl">—</span>
+      <div class="sp"></div>
+      <div class="live" title="現在読んでいるユーザー（デモ値）"><span class="dot"></span><span class="n" id="liveN">—</span><span class="l">閲覧中</span></div>
+      <div class="kbtn" id="kbtn">検索・ジャンプ <b>⌘K</b></div>
+    </header>
+
+    <!-- ==== VIEW: 編集部HQ ==== -->
+    <section class="view on" data-view="hq">
+      <div class="vhead"><span class="sector">SECTOR 00</span><h1>編集部HQ</h1><span class="desc" id="hqDesc">週マガ公式＋マガポケWEBの戦況と今月のミッション</span></div>
+      <div class="grid">
+        <div class="card glow s7 reveal" id="heroCard"></div>
+        <div class="card glow s5 reveal">
+          <div class="ct"><span class="bar"></span><h3>8月ミッションボード</h3><span class="sub">月間目標 × 18日経過時点</span></div>
+          <div class="mission" id="missionBox"></div>
+        </div>
+        <div id="kpiRow" style="display:contents"></div>
+        <div class="card glow s8 reveal">
+          <div class="ct"><span class="bar"></span><h3>セッション・CV トレンド</h3><span class="sub" id="trendSub"></span>
+            <div class="r"><span class="chip on" data-tr="both" >両方</span><span class="chip" data-tr="sess">セッション</span><span class="chip" data-tr="cv">CV</span></div></div>
+          <div class="chart" id="chTrend"></div>
+        </div>
+        <div class="card glow s4 reveal">
+          <div class="ct"><span class="bar"></span><h3>チャネル構成</h3><span class="sub">セッションシェア</span></div>
+          <div class="chart" id="chChannelDonut"></div>
+        </div>
+        <div class="card s12 reveal"><div class="insight" id="hqInsight"></div></div>
+      </div>
+    </section>
+
+    <!-- ==== VIEW: 連載ラインナップ ==== -->
+    <section class="view" data-view="garage">
+      <div class="vhead"><span class="sector">SECTOR 01</span><h1>連載ラインナップ</h1><span class="desc">作品別の集客・課金ステータス（カードをクリックで詳細）</span></div>
+      <div class="grid">
+        <div class="card s12 reveal" style="padding:13px 20px">
+          <div class="ct" style="margin-bottom:0"><span class="bar"></span><h3>ソート・絞り込み</h3>
+            <div class="r" id="garageCtl">
+              <span class="chip on" data-sort="sessions">セッション順</span>
+              <span class="chip" data-sort="cvr">CVR順</span>
+              <span class="chip" data-sort="growth">伸び率順</span>
+              <span style="width:10px"></span>
+              <span class="chip on" data-cat="all">全ジャンル</span>
+            </div>
+          </div>
+        </div>
+        <div class="s12"><div class="mgrid" id="modelCards"></div></div>
+        <div class="card glow s7 reveal">
+          <div class="ct"><span class="bar"></span><h3>作品マップ</h3><span class="sub">面積=セッション ／ 色=CVR（濃いほど高い）</span></div>
+          <div class="chart" id="chTreemap" style="min-height:380px"></div>
+        </div>
+        <div class="card glow s5 reveal">
+          <div class="ct"><span class="bar"></span><h3>伸び率ランキング</h3><span class="sub">前期間比</span></div>
+          <div class="chart" id="chGrowth" style="min-height:380px"></div>
+        </div>
+        <div class="card s12 reveal">
+          <div class="ct"><span class="bar"></span><h3>作品リーグ表</h3><span class="sub">列見出しクリックでソート</span></div>
+          <div class="twrap"><table id="leagueTable"></table></div>
+        </div>
+        <div class="card s12 reveal"><div class="insight" id="garageInsight"></div></div>
+      </div>
+    </section>
+
+    <!-- ==== VIEW: 課金・CV ==== -->
+    <section class="view" data-view="goods">
+      <div class="vhead"><span class="sector">SECTOR 02</span><h1>課金・CV</h1><span class="desc">定期購読・ポイント・単行本EC・アプリ送客・読書エンゲージの成果</span></div>
+      <div class="grid">
+        <div id="goodsCards" style="display:contents"></div>
+        <div class="card glow s7 reveal">
+          <div class="ct"><span class="bar"></span><h3>商材 × チャネル</h3><span class="sub">CVの獲得元チャネル構成比</span></div>
+          <div class="chart" id="chGoodsCh"></div>
+        </div>
+        <div class="card glow s5 reveal">
+          <div class="ct"><span class="bar"></span><h3>CV構成</h3><span class="sub">8種のコンバージョン</span></div>
+          <div class="chart" id="chGoalDonut"></div>
+        </div>
+        <div class="card s12 reveal">
+          <div class="ct"><span class="bar"></span><h3>CVスコアボード</h3><span class="sub">前期間比つき</span></div>
+          <div class="grid" id="goalTiles" style="gap:11px"></div>
+        </div>
+        <div class="card glow s6 reveal">
+          <div class="ct"><span class="bar"></span><h3>課金・登録ファネル</h3>
+            <div class="r" id="funnelGoalCtl"></div></div>
+          <div class="chart" id="chGoalFunnel"></div>
+        </div>
+        <div class="card glow s6 reveal">
+          <div class="ct"><span class="bar"></span><h3>作品 × 主要CV</h3><span class="sub">ポイント・購読・アプリの獲得マップ</span></div>
+          <div class="chart" id="chModelGoal"></div>
+        </div>
+        <div class="card s12 reveal"><div class="insight" id="goodsInsight"></div></div>
+      </div>
+    </section>
+
+    <!-- ==== VIEW: 読者動線マップ ==== -->
+    <section class="view" data-view="flow">
+      <div class="vhead"><span class="sector">SECTOR 03</span><h1>読者動線マップ</h1><span class="desc">流入 → 試し読み → 課金のルート全体図</span></div>
+      <div class="grid">
+        <div class="card s12 reveal">
+          <div class="ct"><span class="bar"></span><h3>ステージクリア状況</h3><span class="sub">左から右へ進むほど深い読書・課金行動</span></div>
+          <div class="gates" id="gateRow"></div>
+        </div>
+        <div class="card glow s12 reveal">
+          <div class="ct"><span class="bar"></span><h3>サイト内ルートマップ（サンキー図）</h3><span class="sub">帯の太さ=セッション量 ／ 金色の帯=CVへ向かう読者</span></div>
+          <div class="chart tall" id="chSankey"></div>
+        </div>
+        <div class="card glow s6 reveal">
+          <div class="ct"><span class="bar"></span><h3>ランディング別 その後の行動</h3><span class="sub">入口ページ群ごとの回遊内訳</span></div>
+          <div class="chart" id="chLpNext"></div>
+        </div>
+        <div class="card glow s6 reveal">
+          <div class="ct"><span class="bar"></span><h3>試し読みの威力</h3><span class="sub">試し読み利用有無 × CVR</span></div>
+          <div class="chart" id="chToolPower"></div>
+        </div>
+        <div class="card s12 reveal"><div class="insight" id="flowInsight"></div></div>
+      </div>
+    </section>
+
+    <!-- ==== VIEW: 集客・プロモ ==== -->
+    <section class="view" data-view="acq">
+      <div class="vhead"><span class="sector">SECTOR 04</span><h1>集客・プロモ</h1><span class="desc">チャネル・キャンペーン・トラッキングコード（UTM）の成績</span></div>
+      <div class="grid">
+        <div class="card s12 reveal">
+          <div class="ct"><span class="bar"></span><h3>チャネル成績表</h3><span class="sub" id="acqSub"></span></div>
+          <div class="twrap"><table id="channelTable"></table></div>
+        </div>
+        <div class="card s12 reveal">
+          <div class="ct"><span class="bar"></span><h3>キャンペーンリーグ</h3><span class="sub">ROAS順（LTV換算）／ 列見出しクリックでソート</span></div>
+          <div class="twrap"><table id="campaignTable"></table></div>
+        </div>
+        <div class="card glow s5 reveal">
+          <div class="ct"><span class="bar"></span><h3>トラッキングコード ツリー</h3><span class="sub">utm_source → utm_campaign</span></div>
+          <div class="chart" id="chUtm" style="min-height:380px"></div>
+        </div>
+        <div class="card glow s7 reveal">
+          <div class="ct"><span class="bar"></span><h3>投資対効果マップ</h3><span class="sub">横=広告費 ／ 縦=CV ／ 円=セッション量</span></div>
+          <div class="chart" id="chBubble" style="min-height:380px"></div>
+        </div>
+        <div class="card s12 reveal"><div class="insight" id="acqInsight"></div></div>
+      </div>
+    </section>
+
+    <!-- ==== VIEW: 読者オーディエンス ==== -->
+    <section class="view" data-view="aud">
+      <div class="vhead"><span class="sector">SECTOR 05</span><h1>読者オーディエンス</h1><span class="desc">新規・再訪、アフィニティ、属性のプロファイル</span></div>
+      <div class="grid">
+        <div class="card glow s4 reveal">
+          <div class="ct"><span class="bar"></span><h3>新規 × 再訪</h3><span class="sub">セッション構成</span></div>
+          <div class="chart mid" id="chNewRet"></div>
+        </div>
+        <div class="card glow s8 reveal">
+          <div class="ct"><span class="bar"></span><h3>再訪コンボ</h3><span class="sub">「待てば無料」の毎日回収でCVRが跳ね上がる</span></div>
+          <div class="combo" id="comboRow"></div>
+        </div>
+        <div class="card glow s6 reveal">
+          <div class="ct"><span class="bar"></span><h3>アフィニティセグメント</h3><span class="sub">構成シェアとCVR指数（全体=100）</span></div>
+          <div class="chart" id="chAffinity" style="min-height:360px"></div>
+        </div>
+        <div class="card glow s6 reveal">
+          <div class="ct"><span class="bar"></span><h3>再訪の鮮度 × 頻度</h3><span class="sub">再訪セッションのRF分布</span></div>
+          <div class="chart" id="chRf" style="min-height:360px"></div>
+        </div>
+        <div class="card glow s6 reveal">
+          <div class="ct"><span class="bar"></span><h3>年齢 × 性別</h3><span class="sub">推定属性（Googleシグナル）</span></div>
+          <div class="chart" id="chDemo"></div>
+        </div>
+        <div class="card glow s6 reveal">
+          <div class="ct"><span class="bar"></span><h3>会員ステータス × CVR</h3><span class="sub">カスタムディメンション member_status</span></div>
+          <div class="chart" id="chMember"></div>
+        </div>
+        <div class="card glow s4 reveal">
+          <div class="ct"><span class="bar"></span><h3>デバイス</h3></div>
+          <div class="chart mid" id="chDevice"></div>
+        </div>
+        <div class="card glow s8 reveal">
+          <div class="ct"><span class="bar"></span><h3>エリア別セッション</h3><span class="sub">推定エリア（Googleシグナル）</span></div>
+          <div class="chart mid" id="chArea"></div>
+        </div>
+        <div class="card s12 reveal"><div class="insight" id="audInsight"></div></div>
+      </div>
+    </section>
+
+    <!-- ==== VIEW: クロス分析ラボ ==== -->
+    <section class="view" data-view="lab">
+      <div class="vhead"><span class="sector">SECTOR 06</span><h1>クロス分析ラボ</h1><span class="desc">6ディメンション × 4指標を自由にクロス</span></div>
+      <div class="grid">
+        <div class="card s12 reveal">
+          <div class="ct"><span class="bar"></span><h3>おすすめクロス</h3></div>
+          <div class="preset" id="labPresets"></div>
+          <div class="labctl">
+            <div class="grp"><span class="lb">行</span><span id="labRow"></span></div>
+            <div class="grp"><span class="lb">列</span><span id="labCol"></span></div>
+            <div class="grp"><span class="lb">指標</span><span id="labMetric"></span></div>
+          </div>
+          <div class="chart tall" id="chLab"></div>
+          <div style="margin-top:13px"><div class="insight" id="labInsight"></div></div>
+        </div>
+        <div class="card s12 reveal">
+          <div class="ct"><span class="bar"></span><h3>作品 対戦モード</h3><span class="sub">2作品のデジタル戦闘力を直接比較</span></div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:13px">
+            <select class="sel" id="vsA"></select>
+            <select class="sel" id="vsB"></select>
+          </div>
+          <div class="vs">
+            <div class="vscol" id="vsColA"></div>
+            <div class="vsmid"><span class="vslogo">VS</span></div>
+            <div class="vscol" id="vsColB"></div>
+          </div>
+          <div class="chart" id="chVsRadar" style="min-height:340px;margin-top:13px"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==== VIEW: 計測設計 ==== -->
+    <section class="view" data-view="dict">
+      <div class="vhead"><span class="sector">SECTOR 07</span><h1>計測設計</h1><span class="desc">カスタムディメンション・イベント・UTM命名の管理台帳</span></div>
+      <div class="grid">
+        <div class="card s12 reveal">
+          <div class="ct"><span class="bar"></span><h3>カスタムディメンション台帳</h3><span class="sub">GA4 プロパティ設定と同期（デモ）</span></div>
+          <div class="twrap"><table id="cdTable"></table></div>
+        </div>
+        <div class="card s7 reveal">
+          <div class="ct"><span class="bar"></span><h3>イベント辞書</h3><span class="sub">主要イベントと発生数（選択期間）</span></div>
+          <div class="twrap"><table id="evTable"></table></div>
+        </div>
+        <div class="card s5 reveal">
+          <div class="ct"><span class="bar"></span><h3>UTM命名規約</h3></div>
+          <div id="utmRules" style="font-size:12.3px;line-height:2.05"></div>
+        </div>
+        <div class="card s12 reveal"><div class="insight warn" id="dictInsight"></div></div>
+      </div>
+    </section>
+
+    <footer class="foot">
+      <div>本ボードは <b>合成デモデータ</b> で動作しています。GA4 Data API（<span class="num">runReport</span>）接続時は、チャネル＝<a href="https://support.google.com/analytics/answer/9756891?hl=ja" target="_blank" rel="noopener">デフォルトチャネルグループ</a>、アフィニティ＝<a href="https://support.google.com/analytics/answer/2819950?hl=ja" target="_blank" rel="noopener">Googleシグナルのアフィニティカテゴリ</a>、作品・話数・課金種別＝<a href="https://support.google.com/analytics/answer/14240153?hl=ja" target="_blank" rel="noopener">カスタムディメンション</a>にそのまま置き換わる設計です。本ボードは講談社・週刊少年マガジンの公式プロダクトではない技術デモです。</div>
+      <div class="src">出典・定義：<a href="https://developers.google.com/analytics/devguides/reporting/data/v1?hl=ja" target="_blank" rel="noopener">GA4 Data API</a> ／ <a href="https://support.google.com/analytics/answer/9143382?hl=ja" target="_blank" rel="noopener">GA4 ディメンションと指標</a> ／ 姉妹ボード：<a href="https://ketrketr2.github.io/toyota-ga-board/" target="_blank" rel="noopener">TOYOTA GA4 COMMAND</a>・<a href="https://ketrketr2.github.io/toyota-geo-board/" target="_blank" rel="noopener">AI Visibility KPI Board（GEO）</a> ／ ソースコード：<a href="https://github.com/ketrketr2/shonen-magazine-ga-board" target="_blank" rel="noopener">GitHub</a></div>
+    </footer>
+  </div>
+</div>
+
+<!-- モーダル・パレット・トースト -->
+<div class="modal" id="modelModal"><div class="mbox" id="modelModalBox"></div></div>
+<div class="cmdk" id="cmdk"><div class="ckbox"><input id="ckInput" placeholder="ビュー・作品・キャンペーンを検索…（Esc で閉じる）"><div class="cklist" id="ckList"></div></div></div>
+<div class="toasts" id="toasts"></div>
