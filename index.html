@@ -374,6 +374,7 @@ select.sel:focus{outline:1px solid var(--cy)}
     <nav class="nav" id="nav">
       <button data-view="hq" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>編集部HQ<span class="lv" id="navScore">—</span></button>
       <button data-view="garage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h6a3 3 0 0 1 3 3v13a2.5 2.5 0 0 0-2.5-2.5H4z"/><path d="M20 4h-6a3 3 0 0 0-3 3v13a2.5 2.5 0 0 1 2.5-2.5H20z"/></svg>連載ラインナップ</button>
+      <button data-view="studio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7.2l1.5 3.1 3.4.4-2.5 2.3.7 3.4-3.1-1.7-3.1 1.7.7-3.4-2.5-2.3 3.4-.4z"/></svg>作品スタジオ</button>
       <button data-view="goods"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 7l-8-4-8 4v10l8 4 8-4z"/><path d="M4 7l8 4 8-4"/><path d="M12 11v10"/></svg>課金・CV</button>
       <button data-view="flow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5h6v5H4zM14 3h6v5h-6zM14 13h6v5h-6zM4 15h6v6H4z"/><path d="M10 7h4M10 17h4"/></svg>読者動線マップ</button>
       <button data-view="acq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></svg>集客・プロモ</button>
@@ -461,9 +462,49 @@ select.sel:focus{outline:1px solid var(--cy)}
       </div>
     </section>
 
+    <!-- ==== VIEW: 作品スタジオ ==== -->
+    <section class="view" data-view="studio">
+      <div class="vhead"><span class="sector">SECTOR 02</span><h1>作品スタジオ</h1><span class="desc">ポートフォリオ俯瞰 → 1作品ディープダイブ</span></div>
+      <div class="grid">
+        <div class="card glow s12 reveal">
+          <div class="ct"><span class="bar"></span><h3>作品ポートフォリオ（規模 × 成長）</h3><span class="sub">横=セッション規模（対数） ／ 縦=前期間比 ／ 円の大きさ=CV量 ／ 色=ジャンル ／ バブルをクリックで下に展開</span></div>
+          <div class="chart" id="chPpm" style="min-height:440px"></div>
+        </div>
+        <div class="card s12 reveal" style="padding:13px 20px">
+          <div class="ct" style="margin-bottom:0"><span class="bar"></span><h3>作品を選択</h3><div class="r" id="studioSel"></div></div>
+        </div>
+        <div class="card s12 reveal" id="studioHero"></div>
+        <div class="card glow s7 reveal">
+          <div class="ct"><span class="bar"></span><h3>日次セッション</h3><span class="sub" id="stTrendSub"></span></div>
+          <div class="chart" id="chStTrend"></div>
+        </div>
+        <div class="card glow s5 reveal">
+          <div class="ct"><span class="bar"></span><h3>流入チャネル構成</h3></div>
+          <div class="chart" id="chStCh"></div>
+        </div>
+        <div class="card glow s6 reveal">
+          <div class="ct"><span class="bar"></span><h3>コンバージョン内訳</h3><span class="sub">8種CV・この作品のみ</span></div>
+          <div class="chart" id="chStCv"></div>
+        </div>
+        <div class="card glow s6 reveal">
+          <div class="ct"><span class="bar"></span><h3>読者の興味関心プロファイル</h3><span class="sub">全体読者=100とした指数</span></div>
+          <div class="chart" id="chStAff"></div>
+        </div>
+        <div class="card glow s6 reveal">
+          <div class="ct"><span class="bar"></span><h3>年齢 × 性別</h3><span class="sub">この作品の読者構成（推定）</span></div>
+          <div class="chart" id="chStDemo"></div>
+        </div>
+        <div class="card glow s6 reveal">
+          <div class="ct"><span class="bar"></span><h3>読者が近い作品</h3><span class="sub">興味関心プロファイルの類似度 ／ クリックで切替</span></div>
+          <div id="stSimilar" style="display:flex;flex-direction:column;gap:10px;padding-top:2px"></div>
+        </div>
+        <div class="card s12 reveal"><div class="insight" id="studioInsight"></div></div>
+      </div>
+    </section>
+
     <!-- ==== VIEW: 課金・CV ==== -->
     <section class="view" data-view="goods">
-      <div class="vhead"><span class="sector">SECTOR 02</span><h1>課金・CV</h1><span class="desc">定期購読・ポイント・単行本EC・アプリ送客・読書エンゲージの成果</span></div>
+      <div class="vhead"><span class="sector">SECTOR 03</span><h1>課金・CV</h1><span class="desc">定期購読・ポイント・単行本EC・アプリ送客・読書エンゲージの成果</span></div>
       <div class="grid">
         <div id="goodsCards" style="display:contents"></div>
         <div class="card glow s7 reveal">
@@ -493,7 +534,7 @@ select.sel:focus{outline:1px solid var(--cy)}
 
     <!-- ==== VIEW: 読者動線マップ ==== -->
     <section class="view" data-view="flow">
-      <div class="vhead"><span class="sector">SECTOR 03</span><h1>読者動線マップ</h1><span class="desc">流入 → 試し読み → 課金のルート全体図</span></div>
+      <div class="vhead"><span class="sector">SECTOR 04</span><h1>読者動線マップ</h1><span class="desc">流入 → 試し読み → 課金のルート全体図</span></div>
       <div class="grid">
         <div class="card s12 reveal">
           <div class="ct"><span class="bar"></span><h3>ステージクリア状況</h3><span class="sub">左から右へ進むほど深い読書・課金行動</span></div>
@@ -517,7 +558,7 @@ select.sel:focus{outline:1px solid var(--cy)}
 
     <!-- ==== VIEW: 集客・プロモ ==== -->
     <section class="view" data-view="acq">
-      <div class="vhead"><span class="sector">SECTOR 04</span><h1>集客・プロモ</h1><span class="desc">チャネル・キャンペーン・トラッキングコード（UTM）の成績</span></div>
+      <div class="vhead"><span class="sector">SECTOR 05</span><h1>集客・プロモ</h1><span class="desc">チャネル・キャンペーン・トラッキングコード（UTM）の成績</span></div>
       <div class="grid">
         <div class="card s12 reveal">
           <div class="ct"><span class="bar"></span><h3>チャネル成績表</h3><span class="sub" id="acqSub"></span></div>
@@ -541,7 +582,7 @@ select.sel:focus{outline:1px solid var(--cy)}
 
     <!-- ==== VIEW: 読者オーディエンス ==== -->
     <section class="view" data-view="aud">
-      <div class="vhead"><span class="sector">SECTOR 05</span><h1>読者オーディエンス</h1><span class="desc">新規・再訪、アフィニティ、属性のプロファイル</span></div>
+      <div class="vhead"><span class="sector">SECTOR 06</span><h1>読者オーディエンス</h1><span class="desc">新規・再訪、アフィニティ、属性のプロファイル</span></div>
       <div class="grid">
         <div class="card glow s4 reveal">
           <div class="ct"><span class="bar"></span><h3>新規 × 再訪</h3><span class="sub">セッション構成</span></div>
@@ -581,7 +622,7 @@ select.sel:focus{outline:1px solid var(--cy)}
 
     <!-- ==== VIEW: クロス分析ラボ ==== -->
     <section class="view" data-view="lab">
-      <div class="vhead"><span class="sector">SECTOR 06</span><h1>クロス分析ラボ</h1><span class="desc">6ディメンション × 4指標を自由にクロス</span></div>
+      <div class="vhead"><span class="sector">SECTOR 07</span><h1>クロス分析ラボ</h1><span class="desc">6ディメンション × 4指標を自由にクロス</span></div>
       <div class="grid">
         <div class="card s12 reveal">
           <div class="ct"><span class="bar"></span><h3>おすすめクロス</h3></div>
@@ -612,7 +653,7 @@ select.sel:focus{outline:1px solid var(--cy)}
 
     <!-- ==== VIEW: 計測設計 ==== -->
     <section class="view" data-view="dict">
-      <div class="vhead"><span class="sector">SECTOR 07</span><h1>計測設計</h1><span class="desc">カスタムディメンション・イベント・UTM命名の管理台帳</span></div>
+      <div class="vhead"><span class="sector">SECTOR 08</span><h1>計測設計</h1><span class="desc">カスタムディメンション・イベント・UTM命名の管理台帳</span></div>
       <div class="grid">
         <div class="card s12 reveal">
           <div class="ct"><span class="bar"></span><h3>カスタムディメンション台帳</h3><span class="sub">GA4 プロパティ設定と同期（デモ）</span></div>
@@ -1376,7 +1417,7 @@ const GA = (() => {
   return {DATES,CHANNELS,MODELS,GOODS,GOALS,AFFINITY,STAGES,AREAS,BUCKETS,RECENCY,DEVICES,AGES,EVENTS,
     CUSTOM_DIMS,EVENTS_DICT,DIMS,STAGE_LOGIN,
     agg,pairMatrix,sankey,funnel,comboData,rfMatrix,affinityAgg,campaigns,utmTree,missions,score,
-    memberData,deviceAgg,demoAgg,areaAgg,affShare,goodsShare,areaShare};
+    memberData,deviceAgg,demoAgg,areaAgg,affShare,goodsShare,areaShare,ageGender};
 })();
 
 </script>
@@ -1389,7 +1430,7 @@ const $$=(s,el=document)=>Array.from(el.querySelectorAll(s));
 const ST={range:28,seg:'all',view:'hq',trendMode:'both',
   garage:{sort:'sessions',cat:'all'},
   lab:{row:'model',col:'channel',metric:'sessions'},
-  vs:{a:'bluelock',b:'shanfro'}, funnelGoal:'kinto',
+  vs:{a:'bluelock',b:'shanfro'}, funnelGoal:'kinto', studio:{title:'bluelock'},
   dirty:{}, campSort:{key:'roas',dir:-1}, leagueSort:{key:'sessions',dir:-1}};
 
 /* ---------- 表示フォーマッタ ---------- */
@@ -1774,7 +1815,7 @@ function openModelModal(id){
         <span class="cat" style="font-size:10px;border:1px solid var(--line2);border-radius:5px;padding:0 7px;color:var(--tx2)">${m.cat}</span>
         <span class="mono">${m.price}</span><div class="hex sm ${m.tier}">${m.tier}</div></div>
       <div style="font-size:11px;color:var(--mut)">ランク #${m.rank} ／ セッション ${fmtJP(m.sessions)} ${deltaPill(m.sessions,m.prevSessions)} ／ CVR ${pct(m.cvr,2)}</div>
-    </div><button class="close" id="mClose">閉じる esc</button></div>
+    </div><button class="close" id="mStudio" style="margin-left:auto;border-color:color-mix(in srgb,var(--te) 45%,var(--line2));color:var(--te)">作品スタジオで開く →</button><button class="close" id="mClose" style="margin-left:8px">閉じる esc</button></div>
     <div class="mgrid2">
       <div class="mcell"><h4>日次セッション推移</h4><div id="mdTrend" style="min-height:200px"></div></div>
       <div class="mcell"><h4>流入チャネル構成</h4><div id="mdCh" style="min-height:200px"></div></div>
@@ -1783,6 +1824,7 @@ function openModelModal(id){
     </div>`;
   $('#modelModal').classList.add('on');
   $('#mClose').onclick=closeModal;
+  $('#mStudio').onclick=()=>{closeModal();ST.studio.title=id;ST.dirty.studio=true;showView('studio')};
   const mk=(id2)=>{const c=echarts.init($('#'+id2));modalCharts.push(c);return c};
   mk('mdTrend').setOption(baseOpt({
     tooltip:Object.assign({},TIP,{trigger:'axis',valueFormatter:v=>fmtJP(v)}),
@@ -2474,11 +2516,220 @@ function renderDict(){
     <p>UTM捕捉率は広告セッションの <b class="num">${pct(GA.utmTree(ST.range).tracked/GA.utmTree(ST.range).paidSess,0)}</b>【検証済み：選択期間の有料チャネル対象】。未捕捉分は媒体側の自動タグ（gclid等）で補完されるが、命名規約の徹底が第一。</p>`;
 }
 
+/* ==================================================
+   VIEW: 作品スタジオ（PPMポートフォリオ＋ディープダイブ）
+   ================================================== */
+const GENRE_LIST=[...new Set(GA.MODELS.map(m=>m.cat))];
+const GENRE_COLOR=Object.fromEntries(GENRE_LIST.map((g,i)=>[g,CAT8[i%8]]));
+function cosSim(a,b){let d=0,na=0,nb=0;for(let i=0;i<a.length;i++){d+=a[i]*b[i];na+=a[i]*a[i];nb+=b[i]*b[i]}return d/Math.sqrt(na*nb)}
+
+function renderStudio(){
+  const A=GA.agg(ST.range,ST.seg);
+
+  /* ---- PPM ポートフォリオ ---- */
+  const meds=[...A.models.map(m=>m.sessions)].sort((a,b)=>a-b);
+  const medS=meds[Math.floor(meds.length/2)];
+  const maxCv=Math.max(...A.models.map(m=>m.cv));
+  const pts=A.models.map(m=>({m,x:m.sessions,y:+((m.sessions/m.prevSessions-1)*100).toFixed(1)}));
+  const ymin=Math.min(...pts.map(p=>p.y)), ymax=Math.max(...pts.map(p=>p.y));
+  E('chPpm').setOption(baseOpt({
+    tooltip:Object.assign({},TIP,{formatter:p=>{
+      const m=p.data.m;
+      return `<b>${m.name}</b>（${m.cat}）<br>セッション <b>${fmtJP(m.sessions)}</b> ／ 前期間比 <b>${(p.data.value[1]>0?'+':'')+p.data.value[1]}%</b><br>CV ${fmtJP(m.cv)} ／ CVR ${pct(m.cvr,2)}<br><span style="color:${MUT};font-size:11px">クリックで下にディープダイブを展開</span>`;}}),
+    legend:{top:0,textStyle:{color:TX2,fontSize:10.5},itemWidth:11,itemHeight:11,icon:'roundRect',itemGap:9,
+      data:GENRE_LIST},
+    grid:{left:14,right:30,top:34,bottom:8,containLabel:true},
+    xAxis:Object.assign(axY(),{type:'log',
+      axisLabel:{formatter:v=>fmtJP(v),color:MUT,fontSize:10,fontFamily:MONOF}}),
+    yAxis:axY({axisLabel:{formatter:v=>v+'%',color:MUT,fontSize:10,fontFamily:MONOF}}),
+    series:GENRE_LIST.map(g=>({name:g,type:'scatter',
+      symbolSize:(val,params)=>10+Math.sqrt(params.data.m.cv/maxCv)*38,
+      itemStyle:{color:GENRE_COLOR[g],opacity:.9,borderColor:'#0A1120',borderWidth:1.5,
+        shadowBlur:8,shadowColor:GENRE_COLOR[g]+'55'},
+      label:{show:true,position:'top',distance:3,color:TX2,fontSize:10,fontFamily:FONT,
+        formatter:p=>p.data.m.name.length>8?p.data.m.name.slice(0,8)+'…':p.data.m.name},
+      emphasis:{scale:1.2,label:{color:TX,fontWeight:700}},
+      labelLayout:{hideOverlap:true},
+      data:pts.filter(p=>p.m.cat===g).map(p=>({value:[p.x,p.y],m:p.m}))})),
+    graphic:[
+      {type:'text',right:34,top:40,style:{text:'⭐ スター（看板）',fill:GD,fontSize:11,fontWeight:700,fontFamily:FONT}},
+      {type:'text',right:34,bottom:44,style:{text:'💰 金のなる木（規模大・安定）',fill:TX2,fontSize:11,fontFamily:FONT}},
+      {type:'text',left:70,top:40,style:{text:'🚀 スター候補（急上昇）',fill:TE,fontSize:11,fontWeight:700,fontFamily:FONT}},
+      {type:'text',left:70,bottom:44,style:{text:'🔧 テコ入れ検討',fill:MUT,fontSize:11,fontFamily:FONT}},
+    ]
+  }),true);
+  charts['chPpm'].off('click');
+  charts['chPpm'].on('click',p=>{if(p.data&&p.data.m){ST.studio.title=p.data.m.id;drawStudioDetail()}});
+  // 象限ライン（markLine はシリーズ単位のため graphic で縦横線を引かず、splitLineで代替）
+  charts['chPpm'].setOption({series:[{markLine:{silent:true,symbol:'none',animation:false,
+    lineStyle:{color:LINE2,type:[5,5]},label:{show:false},
+    data:[{xAxis:medS},{yAxis:0}]}}]});
+
+  /* ---- セレクタ ---- */
+  $('#studioSel').innerHTML=A.models.map(m=>
+    `<span class="chip ${m.id===ST.studio.title?'on':''}" data-st="${m.id}">
+      <span class="sw" style="background:${GENRE_COLOR[m.cat]}"></span>${m.name}</span>`).join('');
+  $('#studioSel').onclick=e=>{const c=e.target.closest('[data-st]');if(!c)return;
+    ST.studio.title=c.dataset.st;drawStudioDetail()};
+
+  drawStudioDetail();
+}
+
+function drawStudioDetail(){
+  const A=GA.agg(ST.range,ST.seg);
+  const m=A.models.find(x=>x.id===ST.studio.title)||A.models[0];
+  const M0=GA.MODELS[m.mi];
+  $$('#studioSel .chip').forEach(c=>c.classList.toggle('on',c.dataset.st===m.id));
+
+  /* ヒーロー */
+  const g=(m.sessions/m.prevSessions-1)*100;
+  const kpis=[
+    ['セッション',fmtJP(m.sessions),deltaPill(m.sessions,m.prevSessions)],
+    ['CVR',pct(m.cvr,2),''],
+    ['CV合計',fmtJP(m.cv),deltaPill(m.cv,m.cvPrev)],
+    ['再訪率',pct(m.retShare,0),''],
+    ['広告依存度',pct(m.adShare,0),''],
+    ['試し読み到達',pct(m.toolSessions/m.sessions,0),''],
+  ];
+  $('#studioHero').innerHTML=`
+    <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+      <span style="color:${GENRE_COLOR[m.cat]}">${carSvg(m.icon)}</span>
+      <div style="min-width:200px">
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <b style="font-size:20px">${m.name}</b>
+          <span class="tag" style="color:${GENRE_COLOR[m.cat]};background:color-mix(in srgb,${GENRE_COLOR[m.cat]} 13%,transparent)">${m.cat}</span>
+          <span class="mono">${m.price}</span>
+          <div class="hex sm ${m.tier}">${m.tier}</div>
+          <span class="mono">ランク #${m.rank}</span>
+        </div>
+        <div style="font-size:11px;color:var(--mut);margin-top:3px">選択期間 ${A.from.slice(5).replace('-','/')} 〜 ${A.to.slice(5).replace('-','/')} ／ セグメント：${SEGLBL[ST.seg]}</div>
+      </div>
+      <div style="margin-left:auto;display:flex;gap:10px;flex-wrap:wrap">
+        ${kpis.map(([l,v,d])=>`<div style="border:1px solid var(--line);border-radius:11px;background:var(--card2);padding:8px 14px;min-width:96px">
+          <div style="font-size:9.5px;color:var(--mut);letter-spacing:.05em">${l}</div>
+          <div class="num" style="font-size:17px;font-weight:800">${v}</div>
+          <div style="font-size:10px">${d}</div></div>`).join('')}
+      </div>
+    </div>`;
+
+  /* トレンド */
+  $('#stTrendSub').textContent='注釈＝この作品・全体のイベント';
+  const evLines=GA.EVENTS.filter(e=>A.dates.includes(e.date)&&(e.model===m.id||e.model===null)).map(e=>({
+    xAxis:e.date.slice(5).replace('-','/'),
+    label:{formatter:e.label.length>12?e.label.slice(0,12)+'…':e.label,color:e.model===m.id?TE:MUT,fontSize:9.5},
+    lineStyle:{color:e.model===m.id?TE+'88':LINE2,type:[4,4]}}));
+  E('chStTrend').setOption(baseOpt({
+    tooltip:Object.assign({},TIP,{trigger:'axis',valueFormatter:v=>fmtJP(v)}),
+    grid:{left:8,right:14,top:30,bottom:6,containLabel:true},
+    xAxis:axX({data:A.dates.map(d=>d.slice(5).replace('-','/')),boundaryGap:false,
+      axisLabel:{interval:Math.floor(A.dates.length/8),color:MUT,fontSize:10,fontFamily:MONOF}}),
+    yAxis:axY({axisLabel:{formatter:v=>fmtJP(v),color:MUT,fontSize:10,fontFamily:MONOF}}),
+    series:[{name:'セッション',type:'line',data:m.daily.map(v=>Math.round(v)),symbol:'none',
+      lineStyle:{width:2.4,color:GENRE_COLOR[m.cat]},
+      areaStyle:{color:{type:'linear',x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:GENRE_COLOR[m.cat]+'44'},{offset:1,color:GENRE_COLOR[m.cat]+'00'}]}},
+      markLine:{symbol:'none',silent:true,data:evLines,animation:false}}]
+  }),true);
+
+  /* チャネル */
+  E('chStCh').setOption(baseOpt({
+    tooltip:Object.assign({},TIP,{valueFormatter:v=>fmtJP(v)}),
+    legend:{bottom:0,textStyle:{color:TX2,fontSize:9.5},itemWidth:9,itemHeight:9,icon:'roundRect',itemGap:6},
+    series:[{type:'pie',radius:['46%','69%'],center:['50%','40%'],
+      itemStyle:{borderColor:'#0A1120',borderWidth:2,borderRadius:4},label:{show:false},
+      data:GA.CHANNELS.map((c,ci)=>({name:c.name,value:Math.round(m.byChannel[ci]),itemStyle:{color:c.color}}))}],
+    graphic:[{type:'text',left:'center',top:'34%',style:{text:pct(m.adShare,0),fill:TX,fontSize:18,fontWeight:800,fontFamily:MONOF}},
+             {type:'text',left:'center',top:'44%',style:{text:'広告比率',fill:MUT,fontSize:10,fontFamily:FONT}}]
+  }),true);
+
+  /* CV内訳 */
+  E('chStCv').setOption(baseOpt({
+    tooltip:Object.assign({},TIP,{valueFormatter:v=>CM(v)+'件'}),
+    grid:{left:8,right:44,top:8,bottom:6,containLabel:true},
+    xAxis:axY({axisLabel:{formatter:v=>fmtJP(v),color:MUT,fontSize:9.5,fontFamily:MONOF}}),
+    yAxis:axX({type:'category',data:GA.GOALS.map(g=>g.name.length>11?g.name.slice(0,11)+'…':g.name).reverse(),
+      axisLabel:{color:TX2,fontSize:10.5,fontFamily:FONT}}),
+    series:[{type:'bar',barWidth:13,
+      itemStyle:{borderRadius:[0,4,4,0],color:p=>CAT8[(GA.GOALS.length-1-p.dataIndex)%8]},
+      label:{show:true,position:'right',formatter:p=>CM(p.value),color:TX2,fontSize:9.5,fontFamily:MONOF},
+      data:GA.GOALS.map(g=>Math.round(m.cvGoal[g.id])).reverse()}]
+  }),true);
+
+  /* アフィニティ指数（全体=100） */
+  const affAll=GA.affinityAgg(ST.range,ST.seg);
+  const shT=GA.affShare(M0);
+  const idx=GA.AFFINITY.map((af,ai)=>({name:af.name,v:+(shT[af.id]/affAll[ai].share*100-100).toFixed(1)}));
+  E('chStAff').setOption(baseOpt({
+    tooltip:Object.assign({},TIP,{formatter:p=>`<b>${idx[GA.AFFINITY.length-1-p.dataIndex].name}</b><br>指数 <b>${(100+p.value).toFixed(0)}</b>（全体=100）`}),
+    grid:{left:8,right:36,top:8,bottom:6,containLabel:true},
+    xAxis:axY({min:-80,max:120,axisLabel:{formatter:v=>String(100+v),color:MUT,fontSize:9.5,fontFamily:MONOF}}),
+    yAxis:axX({type:'category',data:idx.map(x=>x.name).reverse(),axisLabel:{color:TX2,fontSize:10.5,fontFamily:FONT}}),
+    series:[{type:'bar',barWidth:12,
+      itemStyle:{color:p=>p.value>=0?'#199E70':'#E66767',borderRadius:4},
+      label:{show:true,position:p=>p.value>=0?'right':'left',formatter:p=>(100+p.value).toFixed(0),color:TX2,fontSize:9.5,fontFamily:MONOF},
+      markLine:{symbol:'none',silent:true,data:[{xAxis:0}],lineStyle:{color:'#8FA3B8',type:[4,3]},label:{show:false}},
+      data:idx.map(x=>x.v).reverse()}]
+  }),true);
+
+  /* 年齢×性別 */
+  const gAG=GA.ageGender(M0);
+  E('chStDemo').setOption(baseOpt({
+    tooltip:Object.assign({},TIP,{formatter:p=>`<b>${p.seriesName} ${p.name}</b><br>読者構成 ${Math.abs(p.value).toFixed(1)}%`}),
+    legend:{top:0,textStyle:{color:TX2,fontSize:11},itemWidth:11,itemHeight:11,icon:'roundRect'},
+    grid:{left:8,right:16,top:30,bottom:4,containLabel:true},
+    xAxis:axY({axisLabel:{formatter:v=>Math.abs(v)+'%',color:MUT,fontSize:9.5,fontFamily:MONOF}}),
+    yAxis:axX({type:'category',data:GA.AGES,axisLabel:{color:TX2,fontSize:10.5,fontFamily:MONOF}}),
+    series:[
+      {name:'男性',type:'bar',stack:'d',barWidth:14,itemStyle:{color:CAT8[0],borderRadius:[4,0,0,4]},
+        data:gAG.male.map(v=>-+(v*100).toFixed(1))},
+      {name:'女性',type:'bar',stack:'d',barWidth:14,itemStyle:{color:CAT8[4],borderRadius:[0,4,4,0]},
+        data:gAG.female.map(v=>+(v*100).toFixed(1))},
+    ]
+  }),true);
+
+  /* 読者が近い作品（コサイン類似度） */
+  const baseSh=GA.AFFINITY.map((af,ai)=>affAll[ai].share);
+  const vec=mm=>GA.AFFINITY.map((af,ai)=>GA.affShare(mm)[af.id]-baseSh[ai]);
+  const v0=vec(M0);
+  const sims=GA.MODELS.filter(x=>x.id!==m.id)
+    .map(x=>({x,s:Math.max(0,cosSim(v0,vec(x)))}))
+    .sort((a,b)=>b.s-a.s).slice(0,3);
+  const affN=Object.fromEntries(GA.AFFINITY.map(a=>[a.id,a.name]));
+  $('#stSimilar').innerHTML=sims.map((s,i)=>{
+    const shX=GA.affShare(s.x);
+    const common=GA.AFFINITY.map(af=>({n:affN[af.id],v:Math.min(shT[af.id],shX[af.id])}))
+      .sort((a,b)=>b.v-a.v)[0];
+    const am=A.models.find(z=>z.id===s.x.id);
+    return `<div class="mrow" data-sim="${s.x.id}" style="cursor:pointer">
+      <span class="medal ${i===0?'m1':i===1?'m2':'m3'}">${i+1}</span>
+      <div class="mm"><div class="mt"><b>${s.x.name}</b><span class="mnum">${s.x.cat} ／ ${fmtJP(am.sessions)}セッション</span></div>
+        <div class="mbar"><i class="ontrack" style="width:${(s.s*100).toFixed(0)}%"></i></div></div>
+      <span class="st ontrack">類似 ${(s.s*100).toFixed(0)}%・共通「${common.n}」</span>
+    </div>`;
+  }).join('');
+  $$('#stSimilar [data-sim]').forEach(el=>el.onclick=()=>{ST.studio.title=el.dataset.sim;drawStudioDetail()});
+
+  /* インサイト */
+  const chMax=GA.CHANNELS.map((c,ci)=>({c,v:m.byChannel[ci]/m.sessions})).sort((a,b)=>b.v-a.v)[0];
+  const avgCvr=A.total.cv/A.total.sessions;
+  const topGoal=GA.GOALS.map(gg=>({gg,v:m.cvGoal[gg.id]})).sort((a,b)=>b.v-a.v).filter(x=>x.gg.id!=='estimate'&&x.gg.id!=='acc')[0];
+  const kanketsu=m.price.startsWith('完結');
+  $('#studioInsight').innerHTML=`<span class="it">INSIGHT — ${m.name}</span>
+    <p>主要流入は <span class="hl-b">${chMax.c.name}（${pct(chMax.v,0)}）</span>。前期間比 <b class="num">${(g>0?'+':'')+g.toFixed(1)}%</b> で、CVRは <b class="num">${pct(m.cvr,2)}</b>（全体平均の <b class="num">${(m.cvr/avgCvr).toFixed(1)}倍</b>）。マイクロCVを除く最大の成果は <span class="hl">${topGoal.gg.name} ${CM(topGoal.v)}件</span>。</p>
+    <p>${kanketsu
+      ? `<span class="hl-g">完結作のロングテール型</span>。指名検索・外部流入で読まれ続けており、単行本ECと全巻無料などの再燃企画が価値の中心。`
+      : m.adShare>.45
+        ? `<span class="hl-r">広告依存度 ${pct(m.adShare,0)}</span> と高く、キャンペーン終了後の自然流入への着地が今後の論点。`
+        : `広告依存度 ${pct(m.adShare,0)} と健全で、<span class="hl-g">オーガニック・再訪中心の自走型</span>。`}
+    読者が最も近いのは <span class="hl">${sims[0].x.name}（類似 ${(sims[0].s*100).toFixed(0)}%）</span>で、相互レコメンド・合同フェアの筆頭候補。</p>`;
+
+  requestAnimationFrame(()=>{['chStTrend','chStCh','chStCv','chStAff','chStDemo'].forEach(id=>{try{charts[id].resize()}catch(e){}})});
+}
+
 </script>
 <script>
 /* ============ アプリ制御：ナビ・フィルタ・⌘K・トースト ============ */
-const RENDERERS={hq:renderHQ,garage:renderGarage,goods:renderGoods,flow:renderFlow,acq:renderAcq,aud:renderAud,lab:renderLab,dict:renderDict};
-const VIEW_LABELS={hq:'編集部HQ',garage:'連載ラインナップ',goods:'課金・CV',flow:'読者動線マップ',acq:'集客・プロモ',aud:'読者オーディエンス',lab:'クロス分析ラボ',dict:'計測設計'};
+const RENDERERS={hq:renderHQ,garage:renderGarage,studio:renderStudio,goods:renderGoods,flow:renderFlow,acq:renderAcq,aud:renderAud,lab:renderLab,dict:renderDict};
+const VIEW_LABELS={hq:'編集部HQ',garage:'連載ラインナップ',studio:'作品スタジオ',goods:'課金・CV',flow:'読者動線マップ',acq:'集客・プロモ',aud:'読者オーディエンス',lab:'クロス分析ラボ',dict:'計測設計'};
 const rendered={};
 
 function renderView(v){
@@ -2553,7 +2804,7 @@ let ckItems=[],ckSel=0;
 function buildCk(){
   ckItems=[
     ...Object.entries(VIEW_LABELS).map(([v,l])=>({t:l,k:'ビュー',act:()=>showView(v)})),
-    ...GA.MODELS.map(m=>({t:m.name,k:'作品 → 詳細カルテ',act:()=>{showView('garage');setTimeout(()=>openModelModal(m.id),80)}})),
+    ...GA.MODELS.map(m=>({t:m.name,k:'作品スタジオで開く',act:()=>{ST.studio.title=m.id;ST.dirty.studio=true;showView('studio')}})),
     ...GA.campaigns(90).map(c=>({t:c.name,k:'キャンペーン → 広告リーグ',act:()=>showView('acq')})),
     {t:'クロス：作品×アフィニティ（CVR）',k:'ラボ',act:()=>{ST.lab={row:'model',col:'affinity',metric:'cvr'};$('#labRow').dataset.built='';showView('lab');ST.dirty.lab=true;renderView('lab')}},
   ];
