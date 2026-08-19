@@ -410,7 +410,7 @@ function renderDict(){
       case 'fav':return A.total.modelSessions*.021;
       default:return 0;}
   };
-  const evs=GA.EVENTS_DICT.map(e=>({...e,n:evCount(e)}));
+  const evs=GA.EVENTS_DICT.map(e=>({...e,n:e.n!=null?e.n:evCount(e)}));  // 実測値を優先
   const evMax=Math.max(...evs.map(e=>e.n));
   $('#evTable').innerHTML=`<thead><tr><th>イベント名</th><th>内容</th><th class="num">発生数</th><th class="num">規模</th></tr></thead>
   <tbody>${evs.map(e=>`<tr>
@@ -429,6 +429,18 @@ function renderDict(){
     <p style="font-size:11px;color:var(--mut)">・大文字/日本語/スペース禁止（表記ゆれは自動でチャネル不明に落ちる）<br>・社内リンクにUTMを付けない（セッション断絶の原因）。サイト内バナーは <span class="utm">banner_id</span> を使用</p>`;
 
   const low=GA.CUSTOM_DIMS.filter(d=>d.fill<.8).sort((a,b)=>a.fill-b.fill);
+  /* 実測 上位ページ */
+  if($('#realPagesTable')){
+    const mx=GA.REAL_PAGES[0][1];
+    $('#realPagesTable').innerHTML=`<thead><tr><th>#</th><th>ページ</th><th class="num">セッション</th><th class="num">PV</th><th class="num">規模</th></tr></thead>
+    <tbody>${GA.REAL_PAGES.map((p,i)=>`<tr>
+      <td class="num" style="color:var(--mut)">${i+1}</td>
+      <td><a href="https://shonenmagazine.com${p[0]}" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:11px">${p[0]}</a>${p[0].startsWith('/special_page/')?' <span class="tag" style="color:var(--te);background:color-mix(in srgb,var(--te) 12%,transparent)">作品</span>':''}</td>
+      <td class="num">${CM(p[1])}</td><td class="num">${CM(p[2])}</td>
+      <td class="num"><div class="tbar" style="min-width:110px"><div class="bg"><i style="width:${Math.max(1.5,Math.pow(p[1]/mx,.45)*100).toFixed(0)}%;background:linear-gradient(90deg,var(--cy),var(--te))"></i></div></div></td>
+    </tr>`).join('')}</tbody>`;
+  }
+
   $('#dictInsight').innerHTML=`<span class="it">CHECK — 計測負債</span>
     <p>取得率80%未満のカスタムディメンションが <span class="hl-r">${low.length}本</span>：${low.map(d=>`<b>${d.disp}</b>（<span class="num">${pct(d.fill,0)}</span>）`).join('、')}。特に <span class="hl">推し作品と読了率</span> はプッシュ通知の出し分け・レコメンド精度に直結するため、お気に入り導線の強化とビューア計測の改修を推奨。</p>
     <p>UTM捕捉率は広告セッションの <b class="num">${pct(GA.utmTree(ST.range).tracked/GA.utmTree(ST.range).paidSess,0)}</b>【検証済み：選択期間の有料チャネル対象】。未捕捉分は媒体側の自動タグ（gclid等）で補完されるが、命名規約の徹底が第一。</p>`;
