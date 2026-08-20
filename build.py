@@ -17,7 +17,7 @@ html = f"""<!DOCTYPE html>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SHONEN MAGAZINE GA4 COMMAND — 週マガ・マガポケ デジタル計測ボード</title>
-<meta name="description" content="週刊少年マガジン・マガポケの GA4 データを作品×課金×動線×オーディエンス×広告でクロス分析するゲームUIダッシュボード（デモデータ・非公式技術デモ）">
+<meta name="description" content="週刊少年マガジン・マガポケの GA4 データを作品×課金×動線×オーディエンス×広告でクロス分析するゲームUIダッシュボード（GA4実測キャリブレーション済み・非公式）">
 <meta property="og:title" content="SHONEN MAGAZINE GA4 COMMAND">
 <meta property="og:description" content="作品・課金・動線・再訪・アフィニティ・広告トラッキングを1画面でクロス分析">
 <link rel="preconnect" href="https://fonts.googleapis.com">
