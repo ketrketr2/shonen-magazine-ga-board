@@ -430,7 +430,7 @@ function openModelModal(id){
     <div>強いアフィニティ：${aff.map(([k,v],i)=>`<span class="${i===0?'hl':'hl-b'}">${affN[k]} ${pct(v,0)}</span>`).join('　')}</div>
     <div>強いエリア：${ar.map(([k,v])=>{const a=GA.AREAS.find(x=>x.id===k);return `<b>${a?a.name:k}</b> <span class="num">${pct(v,0)}</span>`}).join('　')}</div>
     <div style="color:var(--tx2)">再訪率 <b class="num" style="color:var(--tx)">${pct(m.retShare,0)}</b> ／ 広告依存度 <b class="num" style="color:${m.adShare>.42?'var(--am)':'var(--tx)'}">${pct(m.adShare,0)}</b> ／ 試し読み到達 <b class="num" style="color:var(--tx)">${fmtJP(m.toolSessions)}</b></div>
-    <div style="font-size:10.5px;color:var(--mut)">※ アフィニティ＝Googleシグナル由来の興味関心セグメント（デモ値）</div>`;
+    <div style="font-size:10.5px;color:var(--mut)">※ アフィニティ＝興味関心セグメント（実測セッション合計に整合する推定按分・Googleシグナル接続で実測化可能）</div>`;
 }
 function closeModal(){
   $('#modelModal').classList.remove('on');

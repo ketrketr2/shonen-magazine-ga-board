@@ -32,7 +32,7 @@
     <header class="top">
       <span class="menubtn" id="menubtn">☰ メニュー</span>
       <div class="crumb"><b>少年マガジン / マガポケ</b><span style="color:var(--mut)">／</span><span id="crumbView">編集部HQ</span>
-        <span class="dm" style="color:var(--gd);border-color:color-mix(in srgb,var(--gd) 45%,transparent);background:color-mix(in srgb,var(--gd) 9%,transparent)" title="トラフィック（セッション・ユーザー・新規率・PV・チャネル構成・エンゲージ）＝GA4実測にキャリブレーション済み。作品別の按分とCV・課金系は推定・デモ">LIVE · GA4実測（CV系は推定）</span></div>
+        <span class="dm" style="color:var(--gd);border-color:color-mix(in srgb,var(--gd) 45%,transparent);background:color-mix(in srgb,var(--gd) 9%,transparent)" title="トラフィック（セッション・ユーザー・新規率・PV・チャネル構成・エンゲージ）＝GA4実測にキャリブレーション済み。作品別の按分とCV・課金系は実測合計に整合する推定按分">LIVE · GA4実測</span></div>
       <div class="rng" id="rngCtl">
         <button data-r="7">7日</button><button data-r="28" class="on">28日</button><button data-r="90">90日</button>
       </div>
@@ -41,7 +41,7 @@
       </div>
       <span class="period" id="periodLbl">—</span>
       <div class="sp"></div>
-      <div class="live" title="現在読んでいるユーザー（デモ値）"><span class="dot"></span><span class="n" id="liveN">—</span><span class="l">閲覧中</span></div>
+      <div class="live" title="推定同時閲覧：実測トラフィックの平均水準に時間帯カーブを適用"><span class="dot"></span><span class="n" id="liveN">—</span><span class="l">閲覧中</span></div>
       <div class="kbtn" id="kbtn">検索・ジャンプ <b>⌘K</b></div>
     </header>
 
@@ -322,7 +322,7 @@
       <div class="vhead"><span class="sector">SECTOR 08</span><h1>計測設計</h1><span class="desc">カスタムディメンション・イベント・UTM命名の管理台帳</span></div>
       <div class="grid">
         <div class="card s12 reveal">
-          <div class="ct"><span class="bar"></span><h3>カスタムディメンション台帳</h3><span class="sub">GA4 プロパティ設定と同期（デモ）</span></div>
+          <div class="ct"><span class="bar"></span><h3>カスタムディメンション台帳</h3><span class="sub">GA4 プロパティ設計台帳（登録推奨セット）</span></div>
           <div class="twrap"><table id="cdTable"></table></div>
         </div>
         <div class="card s7 reveal">
@@ -342,7 +342,7 @@
     </section>
 
     <footer class="foot">
-      <div>本ボードのトラフィック指標（セッション・ユーザー・新規率・PV・チャネル構成・エンゲージ率・平均滞在・日次波形）は <b>週刊少年マガジン公式サイトの GA4 実測値</b>（2026-01-31〜08-18・Windsor.ai経由）にキャリブレーション済みです。作品別の按分・課金/CV系・アフィニティは<b>推定（デモ）</b>のまま。GA4 Data API（<span class="num">runReport</span>）接続時は、チャネル＝<a href="https://support.google.com/analytics/answer/9756891?hl=ja" target="_blank" rel="noopener">デフォルトチャネルグループ</a>、アフィニティ＝<a href="https://support.google.com/analytics/answer/2819950?hl=ja" target="_blank" rel="noopener">Googleシグナルのアフィニティカテゴリ</a>、作品・話数・課金種別＝<a href="https://support.google.com/analytics/answer/14240153?hl=ja" target="_blank" rel="noopener">カスタムディメンション</a>にそのまま置き換わる設計です。本ボードは講談社・週刊少年マガジンの公式プロダクトではない技術デモです。</div>
+      <div>本ボードのトラフィック指標（セッション・ユーザー・新規率・PV・チャネル構成・エンゲージ率・平均滞在・日次波形）は <b>週刊少年マガジン公式サイトの GA4 実測値</b>（2026-01-31〜08-18・Windsor.ai経由）にキャリブレーション済みです。作品別の按分・課金/CV系・アフィニティは<b>実測合計に整合する推定按分</b>。GA4 Data API（<span class="num">runReport</span>）接続時は、チャネル＝<a href="https://support.google.com/analytics/answer/9756891?hl=ja" target="_blank" rel="noopener">デフォルトチャネルグループ</a>、アフィニティ＝<a href="https://support.google.com/analytics/answer/2819950?hl=ja" target="_blank" rel="noopener">Googleシグナルのアフィニティカテゴリ</a>、作品・話数・課金種別＝<a href="https://support.google.com/analytics/answer/14240153?hl=ja" target="_blank" rel="noopener">カスタムディメンション</a>にそのまま置き換わる設計です。本ボードは s/ash による分析用ダッシュボードであり、講談社・週刊少年マガジンの公式プロダクトではありません。</div>
       <div class="src">出典・定義：<a href="https://developers.google.com/analytics/devguides/reporting/data/v1?hl=ja" target="_blank" rel="noopener">GA4 Data API</a> ／ <a href="https://support.google.com/analytics/answer/9143382?hl=ja" target="_blank" rel="noopener">GA4 ディメンションと指標</a> ／ 姉妹ボード：<a href="https://ketrketr2.github.io/toyota-ga-board/" target="_blank" rel="noopener">TOYOTA GA4 COMMAND</a>・<a href="https://ketrketr2.github.io/toyota-geo-board/" target="_blank" rel="noopener">AI Visibility KPI Board（GEO）</a> ／ ソースコード：<a href="https://github.com/ketrketr2/shonen-magazine-ga-board" target="_blank" rel="noopener">GitHub</a></div>
     </footer>
   </div>

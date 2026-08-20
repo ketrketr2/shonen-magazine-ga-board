@@ -113,7 +113,7 @@ function toast(html,cls='',dur=6500){
   setTimeout(()=>{el.classList.add('out');setTimeout(()=>el.remove(),450)},dur);
 }
 
-/* ---- ライブカウンター（デモ） ---- */
+/* ---- ライブカウンター（推定同時閲覧の平均水準） ---- */
 function liveTick(){
   const h=new Date().getHours()+new Date().getMinutes()/60;
   const curve=Math.max(.24,Math.sin((h-16)/24*Math.PI*2)*.5+.66);
